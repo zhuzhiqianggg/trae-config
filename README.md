@@ -38,6 +38,7 @@ cd $HOME\.trae-config; .\scripts\install.ps1
 |------|------|------|------|
 | `superpowers-` | 核心工作流 (TDD, 调试, 规划等) | 14 | [obra/superpowers](https://github.com/obra/superpowers) |
 | `eng-` | 工程实践 (代码审查, 简化, 性能等) | 21 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) |
+| `ops-` | 运维 (K8s, 日志分析, Linux排查, Sealos) | 11 | [TideTree/claude-agents-zh](https://github.com/TideTree/claude-code-agents-zh) + 自编 |
 | `arch-` | 架构设计 (API, 模式, 云架构等) | 5 | [agent-skills-hub](https://github.com/agent-skills-hub/agent-skills-hub) |
 | `quality-` | 代码质量 (clean code, 重构等) | 3 | agent-skills-hub |
 | `test-` | 测试 (模式, API 测试等) | 3 | agent-skills-hub |
@@ -46,7 +47,7 @@ cd $HOME\.trae-config; .\scripts\install.ps1
 | `git-` | Git 版本控制 | 1 | agent-skills-hub |
 | `doc-` | 文档编写 (ADR, API 文档等) | 4 | agent-skills-hub |
 
-**总计: 56 skills**
+**总计: 67 skills**
 
 完整索引: [skills/skills_summary.md](skills/skills_summary.md)
 

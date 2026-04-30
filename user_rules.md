@@ -22,6 +22,20 @@
 - 声明完成前必须运行测试验证
 - 不要假设，要验证
 
+### 5. 文档主动更新（重要）
+
+**Agent 必须在合适的时机主动更新项目文档，无需用户提醒：**
+
+| 触发条件 | 更新哪个文档 | 时机 |
+|----------|-------------|------|
+| 收到新需求 | requirements.md | 收到需求时立即 |
+| 需求变更/完成 | requirements.md | 变更/完成时 |
+| 做出技术决策 | project_memory.md | 决策完成后 |
+| 发现关键信息 | project_memory.md | 发现后立即 |
+| 遇到并解决错误 | lessons_learned.md | 解决后 |
+| 踩坑总结 | lessons_learned.md | 总结后 |
+| 学到新技能 | skills_summary.md | 学会后 |
+
 ## 二、开发工作流（Superpowers）
 
 ```
