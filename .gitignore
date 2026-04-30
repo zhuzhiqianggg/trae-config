@@ -1,0 +1,17 @@
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+
+# OS-specific
+.Direnv/
+
+# Large files
+*.pdf
+*.zip
