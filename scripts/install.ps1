@@ -1,20 +1,14 @@
-# Trae Config — Windows Install Script (PowerShell)
+# Trae Config - Windows Install Script (PowerShell)
 # Auto-detects ~/.trae-cn and ~/.trae, installs to BOTH
-# Usage: irm "https://raw.githubusercontent.com/zhuzhiqianggg/trae-config/main/scripts/install.ps1" | iex
-
-$ErrorActionPreference = "Stop"
-
-$REPO_URL = "https://github.com/zhuzhiqianggg/trae-config.git"
-$CLONE_DIR = "$HOME\.trae-config"
-$SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
-$ROOT_DIR = Split-Path -Parent $SCRIPT_DIR
-
 param(
     [switch]$Force,
     [switch]$DryRun
 )
 
-# Colors
+$ErrorActionPreference = "Stop"
+$REPO_URL = "https://github.com/zhuzhiqianggg/trae-config.git"
+$CLONE_DIR = "$HOME\.trae-config"
+
 function Write-Green($msg)  { Write-Host "[INFO] $msg" -ForegroundColor Green }
 function Write-Yellow($msg) { Write-Host "[WARN] $msg" -ForegroundColor Yellow }
 function Write-Cyan($msg)   { Write-Host "[STEP] $msg" -ForegroundColor Cyan }
@@ -26,7 +20,6 @@ function Install-ToDir {
     Write-Cyan "Installing to: $traeDir ($label)"
     Write-Cyan "=========================================="
 
-    # Skills
     $src = "$CLONE_DIR\skills"
     $dst = "$traeDir\skills"
     if ($DryRun) {
@@ -38,7 +31,6 @@ function Install-ToDir {
         Write-Green "Skills: $count installed"
     }
 
-    # Agents
     $src = "$CLONE_DIR\agents"
     $dst = "$traeDir\agents"
     if ($DryRun) {
@@ -56,7 +48,6 @@ function Install-ToDir {
         Write-Green "Agents: $count installed"
     }
 
-    # Rules
     $src = "$CLONE_DIR\rules"
     $dst = "$traeDir\rules"
     if ($DryRun) {
@@ -68,7 +59,6 @@ function Install-ToDir {
         Write-Green "Rules: $names"
     }
 
-    # user_rules.md
     $src = "$CLONE_DIR\user_rules.md"
     $dst = "$traeDir\user_rules.md"
     if ($DryRun) {
@@ -81,14 +71,12 @@ function Install-ToDir {
     Write-Host ""
 }
 
-# Main
 Write-Green "=========================================="
 Write-Green "  Trae Config Installer"
 Write-Green "  Auto-detecting Trae-CN and Trae"
 Write-Green "=========================================="
 Write-Host ""
 
-# Clone or update
 if (Test-Path "$CLONE_DIR\.git") {
     Write-Green "Updating trae-config repo..."
     Set-Location $CLONE_DIR
@@ -102,16 +90,13 @@ if (Test-Path "$CLONE_DIR\.git") {
 
 Write-Host ""
 
-# Detect and install
 $dirsFound = 0
 
-# Check ~/.trae-cn (Trae-CN) - priority
 if (Test-Path "$HOME\.trae-cn") {
     Install-ToDir "$HOME\.trae-cn" "Trae-CN"
     $dirsFound++
 }
 
-# Check ~/.trae (Trae Overseas)
 if (Test-Path "$HOME\.trae") {
     Install-ToDir "$HOME\.trae" "Trae Overseas"
     $dirsFound++
@@ -127,4 +112,4 @@ Write-Green "=========================================="
 Write-Green "  Installation complete! ($dirsFound dir(s))"
 Write-Green "=========================================="
 Write-Host ""
-Write-Green "Run update: irm `"https://raw.githubusercontent.com/zhuzhiqianggg/trae-config/main/scripts/update.ps1`" | iex"
+Write-Green "Run update: irm https://raw.githubusercontent.com/zhuzhiqianggg/trae-config/main/scripts/update.ps1 | iex"
