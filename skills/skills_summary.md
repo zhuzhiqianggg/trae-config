@@ -67,6 +67,27 @@
 | `test-test-automator` | Master AI-powered test automation with modern frameworks, |
 | `test-testing-patterns` | Jest testing patterns, factory functions, mocking strategies, and TDD workflow. Use when writing unit tests, creating test factories, or following TDD red-green-refactor cycle. |
 
+## Operations 运维管理
+| Skill | Description |
+|-------|-------------|
+| `ops-database-admin` | Expert database administrator specializing in modern database operations |
+| `ops-database-optimizer` | Database performance optimization expert |
+| `ops-deployment-engineer` | Expert deployment engineer specializing in modern deployment strategies |
+| `ops-devops-troubleshooter` | Master DevOps troubleshooting expert |
+| `ops-incident-responder` | Expert incident responder for production issues |
+| `ops-kubernetes-architect` | Expert Kubernetes architect |
+| `ops-linux-troubleshooter` | Linux 系统问题排查专家：CPU/内存/磁盘/网络问题诊断与解决 |
+| `ops-log-analysis` | Linux/Docker/Kubernetes/Nginx 日志收集和分析专家 |
+| `ops-network-engineer` | Expert network engineer |
+| `ops-openclaw` | OpenClaw 运维管理：安装、配置、渠道管理、Gateway 运维、多 Agent 路由、故障排查、安全加固（来源：stellariums/openclaw-skill） |
+| `ops-sealos` | Sealos 集群运维：安装、配置、故障排查、常用操作命令 |
+| `ops-terraform-specialist` | Expert Terraform/OpenTofu specialist |
+
+## WSL 管理
+| Skill | Description |
+|-------|-------------|
+| `wsl-manager` | WSL2 综合管理：网络问题排查、发行版配置、维护任务、性能优化。当用户遇到 WSL 网络/DNS 问题、需要配置发行版或优化 WSL 时触发 |
+
 ## DevOps 部署运维
 | Skill | Description |
 |-------|-------------|
@@ -93,4 +114,4 @@
 | `doc-code-documentation` | "You are a code education expert specializing in explaining complex code through clear narratives, visual diagrams, and step-by-step breakdowns. Transform difficult concepts into understandable explanations." |
 | `doc-doc-generate` | "You are a documentation expert specializing in creating comprehensive, maintainable documentation from code. Generate API docs, architecture diagrams, user guides, and technical references using AI-powered analysis and industry best practices." |
 
-**Total: 56 skills**
+**Total: 69 skills**
