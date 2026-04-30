@@ -1,106 +1,129 @@
 # Trae Config — Windows Install Script (PowerShell)
-# Installs skills, agents, and rules to ~/.trae-cn/ or ~/.trae/
-# Usage: .\scripts\install.ps1
-#   Flags:
-#     -Force    Overwrite existing files
-#     -DryRun   Show what would be done without making changes
+# Auto-detects ~/.trae-cn and ~/.trae, installs to BOTH
+# Usage: .\scripts\install.ps1 [-Force] [-DryRun]
 
 $ErrorActionPreference = "Stop"
 
 $REPO_URL = "https://github.com/zhuzhiqianggg/trae-config.git"
+$CLONE_DIR = "$HOME\.trae-config"
 $SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ROOT_DIR = Split-Path -Parent $SCRIPT_DIR
 
-# Detect Trae directory (.trae-cn or .trae)
-$TRAE_DIR = $null
-$CANDIDATES = @("$HOME\.trae-cn", "$HOME\.trae")
-foreach ($c in $CANDIDATES) {
-    if (Test-Path $c) {
-        $TRAE_DIR = $c
-        break
-    }
-}
-if (-not $TRAE_DIR) {
-    $TRAE_DIR = "$HOME\.trae-cn"
-    Write-Host "[INFO] No .trae-cn or .trae found, creating $TRAE_DIR" -ForegroundColor Green
-    New-Item -ItemType Directory -Path $TRAE_DIR -Force | Out-Null
-}
-
-Write-Host "[INFO] === Trae Config Installer ===" -ForegroundColor Green
-Write-Host "[INFO] Target: $TRAE_DIR" -ForegroundColor Green
-
-# Clone or update repo
-$CLONE_DIR = "$HOME\.trae-config"
-if (Test-Path "$CLONE_DIR\.git") {
-    Write-Host "[INFO] Updating existing clone..." -ForegroundColor Green
-    Set-Location $CLONE_DIR
-    git pull --quiet origin main
-} else {
-    Write-Host "[INFO] Cloning trae-config..." -ForegroundColor Green
-    git clone --quiet --depth 1 $REPO_URL $CLONE_DIR
-}
-
-Write-Host ""
-
-# Copy function
-function Copy-TraeDir {
-    param([string]$src, [string]$dst, [string]$label)
-    
-    if (-not (Test-Path $src)) {
-        Write-Host "[WARN] $label source not found: $src" -ForegroundColor Yellow
-        return
-    }
-    
-    if ((Test-Path $dst) -and (-not $Force)) {
-        Write-Host "[WARN] $label already exists: $dst (use -Force to overwrite)" -ForegroundColor Yellow
-        return
-    }
-    
-    if ($DryRun) {
-        Write-Host "[DRY-RUN] Would install $label: $src -> $dst" -ForegroundColor Green
-        return
-    }
-    
-    if (Test-Path $dst) { Remove-Item -Recurse -Force $dst }
-    Copy-Item -Recurse $src $dst
-    Write-Host "[INFO] Installed $label -> $dst" -ForegroundColor Green
-}
-
-# Parse parameters
 param(
     [switch]$Force,
     [switch]$DryRun
 )
 
-# Install components
-Set-Location $CLONE_DIR
+# Colors
+function Write-Green($msg)  { Write-Host "[INFO] $msg" -ForegroundColor Green }
+function Write-Yellow($msg) { Write-Host "[WARN] $msg" -ForegroundColor Yellow }
+function Write-Cyan($msg)   { Write-Host "[STEP] $msg" -ForegroundColor Cyan }
 
-Copy-TraeDir "$CLONE_DIR\skills" "$TRAE_DIR\skills" "Skills"
-Copy-TraeDir "$CLONE_DIR\agents" "$TRAE_DIR\agents" "Agents"
-Copy-TraeDir "$CLONE_DIR\rules" "$TRAE_DIR\rules" "Rules"
+function Install-ToDir {
+    param([string]$traeDir, [string]$label)
 
-# Install user_rules.md
-if (Test-Path "$CLONE_DIR\user_rules.md") {
-    $dst = "$TRAE_DIR\user_rules.md"
+    Write-Cyan "═══════════════════════════════════════════"
+    Write-Cyan "安装到: $traeDir ($label)"
+    Write-Cyan "═══════════════════════════════════════════"
+
+    # Skills
+    $src = "$CLONE_DIR\skills"
+    $dst = "$traeDir\skills"
     if ($DryRun) {
-        Write-Host "[DRY-RUN] Would install user_rules.md -> $dst" -ForegroundColor Green
-    } elseif ((Test-Path $dst) -and (-not $Force)) {
-        Write-Host "[WARN] user_rules.md already exists (use -Force to overwrite)" -ForegroundColor Yellow
-    } else {
-        if (Test-Path $dst) { Remove-Item -Force $dst }
-        Copy-Item "$CLONE_DIR\user_rules.md" $dst
-        Write-Host "[INFO] Installed user_rules.md -> $dst" -ForegroundColor Green
+        Write-Green "[DRY-RUN] 将安装 Skills: $src -> $dst"
+    } elseif (Test-Path $src) {
+        if (Test-Path $dst) { Remove-Item -Recurse -Force $dst }
+        Copy-Item -Recurse $src $dst
+        $count = (Get-ChildItem -Directory $dst).Count
+        Write-Green "Skills: $count 个"
     }
+
+    # Agents
+    $src = "$CLONE_DIR\agents"
+    $dst = "$traeDir\agents"
+    if ($DryRun) {
+        Write-Green "[DRY-RUN] 将安装 Agents: $src -> $dst"
+    } elseif (Test-Path $src) {
+        New-Item -ItemType Directory -Path $dst -Force | Out-Null
+        Copy-Item "$src\code-reviewer.md" "$dst\" -Force -ErrorAction SilentlyContinue
+        Copy-Item "$src\implementer.md" "$dst\" -Force -ErrorAction SilentlyContinue
+        Copy-Item "$src\spec-reviewer.md" "$dst\" -Force -ErrorAction SilentlyContinue
+        Copy-Item "$src\code-quality-reviewer.md" "$dst\" -Force -ErrorAction SilentlyContinue
+        Remove-Item "$dst\spec-reviewer-prompt.md" -Force -ErrorAction SilentlyContinue
+        Remove-Item "$dst\code-quality-reviewer-prompt.md" -Force -ErrorAction SilentlyContinue
+        Remove-Item "$dst\implementer-prompt.md" -Force -ErrorAction SilentlyContinue
+        $count = (Get-ChildItem -Filter "*.md" $dst).Count
+        Write-Green "Agents: $count 个"
+    }
+
+    # Rules
+    $src = "$CLONE_DIR\rules"
+    $dst = "$traeDir\rules"
+    if ($DryRun) {
+        Write-Green "[DRY-RUN] 将安装 Rules: $src -> $dst"
+    } elseif (Test-Path $src) {
+        if (Test-Path $dst) { Remove-Item -Recurse -Force $dst }
+        Copy-Item -Recurse $src $dst
+        Write-Green "Rules: $((Get-ChildItem $dst).Name -join ', ')"
+    }
+
+    # user_rules.md
+    $src = "$CLONE_DIR\user_rules.md"
+    $dst = "$traeDir\user_rules.md"
+    if ($DryRun) {
+        Write-Green "[DRY-RUN] 将安装 user_rules.md -> $dst"
+    } elseif (Test-Path $src) {
+        Copy-Item $src $dst -Force
+        Write-Green "user_rules.md ✓"
+    }
+
+    Write-Host ""
+}
+
+# Main
+Write-Green "═══════════════════════════════════════════"
+Write-Green "  Trae Config 安装脚本"
+Write-Green "  自动检测 Trae-CN (中国版) 和 Trae (海外版)"
+Write-Green "═══════════════════════════════════════════"
+Write-Host ""
+
+# Clone or update
+if (Test-Path "$CLONE_DIR\.git") {
+    Write-Green "更新 trae-config 仓库..."
+    Set-Location $CLONE_DIR
+    git pull --quiet origin main 2>$null
+    Write-Green "仓库已更新"
+} else {
+    Write-Green "克隆 trae-config 仓库..."
+    git clone --quiet --depth 1 $REPO_URL $CLONE_DIR
+    Write-Green "克隆完成"
 }
 
 Write-Host ""
-if ($DryRun) {
-    Write-Host "[INFO] Dry run complete. No changes were made." -ForegroundColor Green
-} else {
-    Write-Host "[INFO] === Installation Complete ===" -ForegroundColor Green
-    Write-Host "[INFO] Skills: $TRAE_DIR\skills\" -ForegroundColor Green
-    Write-Host "[INFO] Agents: $TRAE_DIR\agents\" -ForegroundColor Green
-    Write-Host "[INFO] Rules:  $TRAE_DIR\rules\" -ForegroundColor Green
-    Write-Host ""
-    Write-Host "[INFO] Run '.\scripts\update.ps1' to update." -ForegroundColor Green
+
+# Detect and install
+$dirsFound = 0
+
+# Check ~/.trae-cn (Trae-CN 中国版) - priority
+if (Test-Path "$HOME\.trae-cn") {
+    Install-ToDir "$HOME\.trae-cn" "Trae-CN 中国版"
+    $dirsFound++
 }
+
+# Check ~/.trae (Trae 海外版)
+if (Test-Path "$HOME\.trae") {
+    Install-ToDir "$HOME\.trae" "Trae 海外版"
+    $dirsFound++
+}
+
+if ($dirsFound -eq 0) {
+    Write-Yellow "未找到 ~/.trae-cn 或 ~/.trae 目录"
+    Write-Green "请先安装 Trae 或 Trae-CN"
+    exit 1
+}
+
+Write-Green "═══════════════════════════════════════════"
+Write-Green "  安装完成! 共安装到 $dirsFound 个目录"
+Write-Green "═══════════════════════════════════════════"
+Write-Host ""
+Write-Green "运行 '.\scripts\update.ps1' 更新"

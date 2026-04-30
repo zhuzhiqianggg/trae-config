@@ -1,151 +1,174 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Trae Config — Linux Install Script
-# Installs skills, agents, and rules to ~/.trae/
-# Usage: bash install.sh
-#   Flags:
-#     --force    Overwrite existing files
-#     --dry-run  Show what would be done without making changes
-#     --help     Show this help message
+# Trae Config — Linux/WSL2/SSH Remote Install Script
+# Auto-detects ~/.trae (Trae 海外版) and ~/.trae-cn (Trae 中国版)
+# Installs to ALL detected directories
+# Usage: bash install.sh [--force] [--dry-run] [--help]
 
 REPO_URL="https://github.com/zhuzhiqianggg/trae-config.git"
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-TRAE_DIR="$HOME/.trae"
 FORCE=false
 DRY_RUN=false
 
-# Parse arguments
 for arg in "$@"; do
     case $arg in
         --force) FORCE=true; shift ;;
         --dry-run) DRY_RUN=true; shift ;;
         --help|-h)
+            echo "Trae Config 安装脚本 — 自动检测 Trae 和 Trae-CN"
+            echo ""
             echo "Usage: bash install.sh [OPTIONS]"
             echo ""
             echo "Options:"
-            echo "  --force    Overwrite existing files without prompting"
-            echo "  --dry-run  Show what would be installed without making changes"
-            echo "  --help     Show this help message"
+            echo "  --force    覆盖已安装的文件"
+            echo "  --dry-run  仅显示将要做什么，不做实际更改"
+            echo "  --help     显示帮助信息"
             exit 0
             ;;
     esac
 done
 
-# Colors for output
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
-NC='\033[0m' # No Color
+CYAN='\033[0;36m'
+NC='\033[0m'
 
-log_info()    { echo -e "${GREEN}[INFO]${NC} $1" >&2; }
-log_warn()    { echo -e "${YELLOW}[WARN]${NC} $1" >&2; }
-log_error()   { echo -e "${RED}[ERROR]${NC} $1" >&2; }
+log_info()  { echo -e "${GREEN}[INFO]${NC} $1" >&2; }
+log_warn()  { echo -e "${YELLOW}[WARN]${NC} $1" >&2; }
+log_error() { echo -e "${RED}[ERROR]${NC} $1" >&2; }
+log_step()  { echo -e "${CYAN}[STEP]${NC} $1" >&2; }
 
-# Check if running in Trae context
 check_deps() {
     if ! command -v git &>/dev/null; then
-        log_error "git is required but not installed."
+        log_error "需要 git，但未安装"
         exit 1
     fi
-    log_info "Dependencies OK"
 }
 
-# Clone or update the repo
 clone_or_update() {
     local clone_dir="$HOME/.trae-config"
-    
+
     if [ -d "$clone_dir/.git" ]; then
-        log_info "Updating existing clone..."
+        log_info "更新 trae-config 仓库..."
         cd "$clone_dir"
-        git pull --quiet origin main
-        log_info "Updated to latest"
+        git pull --quiet origin main 2>/dev/null || true
+        log_info "仓库已更新"
     else
-        log_info "Cloning trae-config..."
+        log_info "克隆 trae-config 仓库..."
         git clone --quiet --depth 1 "$REPO_URL" "$clone_dir"
-        log_info "Cloned successfully"
+        log_info "克隆完成"
     fi
-    
+
     echo "$clone_dir"
 }
 
-# Copy a directory, handling --force and --dry-run
-copy_dir() {
-    local src="$1"
-    local dst="$2"
+# Install to a single Trae directory
+install_to_dir() {
+    local TRAE_DIR="$1"
+    local repo_dir="$2"
     local label="$3"
-    
-    if [ ! -d "$src" ]; then
-        log_warn "$label source not found: $src"
-        return 0
-    fi
-    
-    if [ -d "$dst" ] && [ "$FORCE" = false ]; then
-        log_warn "$label already exists: $dst (use --force to overwrite)"
-        return 0
-    fi
-    
+
+    log_step "═══════════════════════════════════════════"
+    log_step "安装到: ${CYAN}${TRAE_DIR}${NC} (${label})"
+    log_step "═══════════════════════════════════════════"
+
+    # Skills
+    local src="$repo_dir/skills"
+    local dst="$TRAE_DIR/skills"
     if [ "$DRY_RUN" = true ]; then
-        log_info "[DRY-RUN] Would install $label: $src -> $dst"
-        return 0
+        log_info "[DRY-RUN] 将安装 Skills: $src -> $dst"
+    elif [ -d "$src" ]; then
+        mkdir -p "$dst"
+        cp -r "$src/"* "$dst/" 2>/dev/null || true
+        local count
+        count=$(find "$dst" -mindepth 1 -maxdepth 1 -type d | wc -l)
+        log_info "Skills: $count 个"
     fi
-    
-    mkdir -p "$(dirname "$dst")"
-    if [ "$FORCE" = true ] && [ -d "$dst" ]; then
-        rm -rf "$dst"
+
+    # Agents
+    src="$repo_dir/agents"
+    dst="$TRAE_DIR/agents"
+    if [ "$DRY_RUN" = true ]; then
+        log_info "[DRY-RUN] 将安装 Agents: $src -> $dst"
+    elif [ -d "$src" ]; then
+        mkdir -p "$dst"
+        # 只复制标准命名的文件，清理旧格式
+        cp "$src/code-reviewer.md" "$dst/" 2>/dev/null || true
+        cp "$src/implementer.md" "$dst/" 2>/dev/null || true
+        cp "$src/spec-reviewer.md" "$dst/" 2>/dev/null || true
+        cp "$src/code-quality-reviewer.md" "$dst/" 2>/dev/null || true
+        # 清理旧格式重复文件
+        rm -f "$dst/spec-reviewer-prompt.md" "$dst/code-quality-reviewer-prompt.md" "$dst/implementer-prompt.md" 2>/dev/null || true
+        local count
+        count=$(ls "$dst"/*.md 2>/dev/null | wc -l)
+        log_info "Agents: $count 个"
     fi
-    cp -r "$src" "$dst"
-    log_info "Installed $label -> $dst"
+
+    # Rules
+    src="$repo_dir/rules"
+    dst="$TRAE_DIR/rules"
+    if [ "$DRY_RUN" = true ]; then
+        log_info "[DRY-RUN] 将安装 Rules: $src -> $dst"
+    elif [ -d "$src" ]; then
+        mkdir -p "$dst"
+        cp "$src/"* "$dst/" 2>/dev/null || true
+        log_info "Rules: $(ls "$dst" | tr '\n' ', ')"
+    fi
+
+    # user_rules.md
+    src="$repo_dir/user_rules.md"
+    dst="$TRAE_DIR/user_rules.md"
+    if [ "$DRY_RUN" = true ]; then
+        log_info "[DRY-RUN] 将安装 user_rules.md -> $dst"
+    elif [ -f "$src" ]; then
+        cp "$src" "$dst"
+        log_info "user_rules.md ✓"
+    fi
+
+    echo ""
 }
 
-# Main installation
 main() {
     check_deps
-    
-    log_info "=== Trae Config Installer ==="
-    log_info "Target: $TRAE_DIR"
+
+    log_info "═══════════════════════════════════════════"
+    log_info "  Trae Config 安装脚本"
+    log_info "  自动检测 Trae (海外版) 和 Trae-CN (中国版)"
+    log_info "═══════════════════════════════════════════"
     echo ""
-    
+
     local repo_dir
     repo_dir=$(clone_or_update)
     echo ""
-    
-    # Install skills
-    copy_dir "$repo_dir/skills" "$TRAE_DIR/skills" "Skills"
-    
-    # Install agents
-    copy_dir "$repo_dir/agents" "$TRAE_DIR/agents" "Agents"
-    
-    # Install rules
-    copy_dir "$repo_dir/rules" "$TRAE_DIR/rules" "Rules"
-    
-    # Install user_rules.md if it exists
-    if [ -f "$repo_dir/user_rules.md" ]; then
-        local dst="$TRAE_DIR/user_rules.md"
-        if [ "$DRY_RUN" = true ]; then
-            log_info "[DRY-RUN] Would install user_rules.md -> $dst"
-        elif [ -f "$dst" ] && [ "$FORCE" = false ]; then
-            log_warn "user_rules.md already exists (use --force to overwrite)"
-        else
-            if [ "$FORCE" = true ] && [ -f "$dst" ]; then
-                rm -f "$dst"
-            fi
-            cp "$repo_dir/user_rules.md" "$dst"
-            log_info "Installed user_rules.md -> $dst"
-        fi
+
+    # Detect Trae directories
+    local dirs_found=0
+
+    # Check ~/.trae (Trae 海外版)
+    if [ -d "$HOME/.trae" ]; then
+        install_to_dir "$HOME/.trae" "$repo_dir" "Trae 海外版"
+        dirs_found=$((dirs_found + 1))
     fi
-    
+
+    # Check ~/.trae-cn (Trae 中国版)
+    if [ -d "$HOME/.trae-cn" ]; then
+        install_to_dir "$HOME/.trae-cn" "$repo_dir" "Trae-CN 中国版"
+        dirs_found=$((dirs_found + 1))
+    fi
+
+    if [ "$dirs_found" -eq 0 ]; then
+        log_warn "未找到 ~/.trae 或 ~/.trae-cn 目录"
+        log_info "请先安装 Trae 或 Trae-CN，然后再运行此脚本"
+        log_info "或者创建目录: mkdir -p ~/.trae"
+        exit 1
+    fi
+
+    log_info "═══════════════════════════════════════════"
+    log_info "  安装完成! 共安装到 $dirs_found 个目录"
+    log_info "═══════════════════════════════════════════"
     echo ""
-    if [ "$DRY_RUN" = true ]; then
-        log_info "Dry run complete. No changes were made."
-    else
-        log_info "=== Installation Complete ==="
-        log_info "Skills: $TRAE_DIR/skills/"
-        log_info "Agents: $TRAE_DIR/agents/"
-        log_info "Rules:  $TRAE_DIR/rules/"
-        echo ""
-        log_info "Run 'bash update.sh' to update to latest version."
-    fi
+    log_info "运行 'bash ~/.trae-config/scripts/update.sh' 更新"
 }
 
 main
