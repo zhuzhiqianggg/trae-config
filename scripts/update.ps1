@@ -1,10 +1,11 @@
-# Trae Config — Windows Update Script (PowerShell)
-# Auto-detects ~/.trae-cn and ~/.trae, updates BOTH
-# Usage: irm "https://raw.githubusercontent.com/zhuzhiqianggg/trae-config/main/scripts/update.ps1" | iex
+# Trae Config - Windows Update Script (PowerShell)
+# Downloads latest zip and updates ~/.trae-cn and ~/.trae
+param(
+    [switch]$Force
+)
 
 $ErrorActionPreference = "Stop"
-
-$REPO_URL = "https://github.com/zhuzhiqianggg/trae-config.git"
+$ZIP_URL = "https://github.com/zhuzhiqianggg/trae-config/archive/refs/heads/main.zip"
 $CLONE_DIR = "$HOME\.trae-config"
 
 function Write-Green($msg)  { Write-Host "[INFO] $msg" -ForegroundColor Green }
@@ -14,7 +15,7 @@ function Write-Cyan($msg)   { Write-Host "[STEP] $msg" -ForegroundColor Cyan }
 function Sync-TraeDir {
     param([string]$src, [string]$dst, [string]$label)
     
-    if (-not (Test-Path $src)) { return }
+    if (-not (Test-Path $src)) { Write-Yellow "$src not found"; return }
     if (Test-Path $dst) { Remove-Item -Recurse -Force $dst }
     Copy-Item -Recurse $src $dst
     Write-Green "$label synced"
@@ -25,26 +26,36 @@ Write-Green "  Trae Config Updater"
 Write-Green "=========================================="
 Write-Host ""
 
-# Update repo
-if (-not (Test-Path "$CLONE_DIR\.git")) {
-    Write-Yellow "Clone not found, running install first..."
-    $url = "https://raw.githubusercontent.com/zhuzhiqianggg/trae-config/main/scripts/install.ps1"
-    Invoke-Expression (Invoke-RestMethod -Uri $url)
-    exit
+# Download as zip
+Write-Cyan "Downloading trae-config..."
+$ZIP_FILE = "$env:TEMP\trae-config-main.zip"
+$EXTRACT_DIR = "$env:TEMP\trae-config-extract"
+
+try {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    Invoke-WebRequest -Uri $ZIP_URL -OutFile $ZIP_FILE
+    Write-Green "Download complete"
+} catch {
+    Write-Yellow "Download failed: $_"
+    try {
+        $client = New-Object System.Net.WebClient
+        $client.DownloadFile($ZIP_URL, $ZIP_FILE)
+        Write-Green "Download complete (alternate method)"
+    } catch {
+        Write-Yellow "Download failed again: $_"
+        exit 1
+    }
 }
 
-Set-Location $CLONE_DIR
-git fetch origin
-$localHash = (git rev-parse HEAD)
-$remoteHash = (git rev-parse origin/main)
-
-if ($localHash -eq $remoteHash) {
-    Write-Green "Already up to date"
-    exit
-}
-
-git pull --quiet origin main
-Write-Green "Repo updated"
+# Extract
+if (Test-Path $EXTRACT_DIR) { Remove-Item -Recurse -Force $EXTRACT_DIR }
+if (Test-Path $CLONE_DIR) { Remove-Item -Recurse -Force $CLONE_DIR }
+Expand-Archive -Path $ZIP_FILE -DestinationPath $EXTRACT_DIR -Force
+Move-Item "$EXTRACT_DIR\trae-config-main" $CLONE_DIR -Force
+Remove-Item $ZIP_FILE -Force
+Remove-Item $EXTRACT_DIR -Recurse -Force
+Write-Green "Repo ready at: $CLONE_DIR"
+Write-Host ""
 
 # Sync to all detected Trae directories
 $dirsFound = 0

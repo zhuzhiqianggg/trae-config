@@ -1,12 +1,12 @@
 # Trae Config - Windows Install Script (PowerShell)
-# Auto-detects ~/.trae-cn and ~/.trae, installs to BOTH
+# Downloads repo as zip and installs to ~/.trae-cn and ~/.trae
 param(
     [switch]$Force,
     [switch]$DryRun
 )
 
 $ErrorActionPreference = "Stop"
-$REPO_URL = "https://github.com/zhuzhiqianggg/trae-config.git"
+$ZIP_URL = "https://github.com/zhuzhiqianggg/trae-config/archive/refs/heads/main.zip"
 $CLONE_DIR = "$HOME\.trae-config"
 
 function Write-Green($msg)  { Write-Host "[INFO] $msg" -ForegroundColor Green }
@@ -29,6 +29,8 @@ function Install-ToDir {
         Copy-Item -Recurse $src $dst
         $count = (Get-ChildItem -Directory $dst).Count
         Write-Green "Skills: $count installed"
+    } else {
+        Write-Yellow "Skills source not found, skipping"
     }
 
     $src = "$CLONE_DIR\agents"
@@ -46,6 +48,8 @@ function Install-ToDir {
         Remove-Item "$dst\implementer-prompt.md" -Force -ErrorAction SilentlyContinue
         $count = (Get-ChildItem -Filter "*.md" $dst).Count
         Write-Green "Agents: $count installed"
+    } else {
+        Write-Yellow "Agents source not found, skipping"
     }
 
     $src = "$CLONE_DIR\rules"
@@ -57,6 +61,8 @@ function Install-ToDir {
         Copy-Item -Recurse $src $dst
         $names = (Get-ChildItem $dst).Name -join ", "
         Write-Green "Rules: $names"
+    } else {
+        Write-Yellow "Rules source not found, skipping"
     }
 
     $src = "$CLONE_DIR\user_rules.md"
@@ -66,6 +72,8 @@ function Install-ToDir {
     } elseif (Test-Path $src) {
         Copy-Item $src $dst -Force
         Write-Green "user_rules.md installed"
+    } else {
+        Write-Yellow "user_rules.md source not found, skipping"
     }
 
     Write-Host ""
@@ -77,19 +85,40 @@ Write-Green "  Auto-detecting Trae-CN and Trae"
 Write-Green "=========================================="
 Write-Host ""
 
-if (Test-Path "$CLONE_DIR\.git") {
-    Write-Green "Updating trae-config repo..."
-    Set-Location $CLONE_DIR
-    git pull --quiet origin main 2>$null
-    Write-Green "Repo updated"
-} else {
-    Write-Green "Cloning trae-config repo..."
-    git clone --quiet --depth 1 $REPO_URL $CLONE_DIR
-    Write-Green "Clone complete"
+# Download repo as zip (works without git)
+Write-Cyan "Downloading trae-config..."
+$ZIP_FILE = "$env:TEMP\trae-config-main.zip"
+$EXTRACT_DIR = "$env:TEMP\trae-config-extract"
+
+try {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    Invoke-WebRequest -Uri $ZIP_URL -OutFile $ZIP_FILE
+    Write-Green "Download complete"
+} catch {
+    Write-Yellow "Download failed: $_"
+    Write-Green "Trying alternative method..."
+    try {
+        $client = New-Object System.Net.WebClient
+        $client.DownloadFile($ZIP_URL, $ZIP_FILE)
+        Write-Green "Download complete (alternate method)"
+    } catch {
+        Write-Yellow "Download failed again: $_"
+        exit 1
+    }
 }
+
+# Extract
+if (Test-Path $EXTRACT_DIR) { Remove-Item -Recurse -Force $EXTRACT_DIR }
+if (Test-Path $CLONE_DIR) { Remove-Item -Recurse -Force $CLONE_DIR }
+Expand-Archive -Path $ZIP_FILE -DestinationPath $EXTRACT_DIR -Force
+Move-Item "$EXTRACT_DIR\trae-config-main" $CLONE_DIR -Force
+Remove-Item $ZIP_FILE -Force
+Remove-Item $EXTRACT_DIR -Recurse -Force
+Write-Green "Repo ready at: $CLONE_DIR"
 
 Write-Host ""
 
+# Detect and install
 $dirsFound = 0
 
 if (Test-Path "$HOME\.trae-cn") {
