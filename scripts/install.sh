@@ -63,6 +63,57 @@ clone_or_update() {
     echo "$clone_dir"
 }
 
+# Sync skills: add new, update existing, remove stale
+sync_skills() {
+    local src="$1"
+    local dst="$2"
+    local dry_run="$3"
+
+    mkdir -p "$dst"
+    local tmpfile src_skills
+    tmpfile=$(mktemp)
+
+    # Find all directories containing SKILL.md (works for both flat and categorized)
+    while IFS= read -r skilldir; do
+        basename "$skilldir" >> "$tmpfile"
+    done < <(find "$src" -name SKILL.md -exec dirname {} \; | sort -u)
+
+    # Remove skills in target that no longer exist in source
+    for d in "$dst"/*/; do
+        [ -d "$d" ] || continue
+        local name
+        name=$(basename "$d")
+        if ! grep -qxF "$name" "$tmpfile" 2>/dev/null; then
+            if [ "$dry_run" = true ]; then
+                log_info "[DRY-RUN] 将删除旧技能: $name"
+            else
+                rm -rf "$d"
+                log_info "已删除旧技能: $name"
+            fi
+        fi
+    done
+
+    # Copy/overwrite all source skills
+    while IFS= read -r skilldir; do
+        local name
+        name=$(basename "$skilldir")
+        if [ "$dry_run" = true ]; then
+            log_info "[DRY-RUN] 将安装/更新技能: $name"
+        else
+            rm -rf "$dst/$name"
+            cp -r "$skilldir" "$dst/"
+        fi
+    done < <(find "$src" -name SKILL.md -exec dirname {} \; | sort -u)
+
+    rm -f "$tmpfile"
+
+    if [ "$dry_run" = false ]; then
+        local count
+        count=$(find "$dst" -mindepth 1 -maxdepth 1 -type d | wc -l)
+        log_info "Skills: $count 个"
+    fi
+}
+
 # Install to a single Trae directory
 install_to_dir() {
     local TRAE_DIR="$1"
@@ -73,17 +124,11 @@ install_to_dir() {
     log_step "安装到: ${CYAN}${TRAE_DIR}${NC} (${label})"
     log_step "═══════════════════════════════════════════"
 
-    # Skills (从分类子目录扁平复制到目标)
+    # Skills (同步：新增/更新 + 自动清理已删除的技能)
     local src="$repo_dir/skills"
     local dst="$TRAE_DIR/skills"
-    if [ "$DRY_RUN" = true ]; then
-        log_info "[DRY-RUN] 将安装 Skills: $src -> $dst"
-    elif [ -d "$src" ]; then
-        mkdir -p "$dst"
-        find "$src" -mindepth 2 -maxdepth 2 -type d -exec cp -r {} "$dst/" \;
-        local count
-        count=$(find "$dst" -mindepth 1 -maxdepth 1 -type d | wc -l)
-        log_info "Skills: $count 个"
+    if [ -d "$src" ]; then
+        sync_skills "$src" "$dst" "$DRY_RUN"
     fi
 
     # Agents

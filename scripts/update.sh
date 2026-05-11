@@ -16,6 +16,43 @@ log_info()  { echo -e "${GREEN}[INFO]${NC} $1" >&2; }
 log_warn()  { echo -e "${YELLOW}[WARN]${NC} $1" >&2; }
 log_step()  { echo -e "${CYAN}[STEP]${NC} $1" >&2; }
 
+# Sync skills: add new, update existing, remove stale
+sync_skills() {
+    local src="$1"
+    local dst="$2"
+
+    mkdir -p "$dst"
+    local tmpfile
+    tmpfile=$(mktemp)
+
+    while IFS= read -r skilldir; do
+        basename "$skilldir" >> "$tmpfile"
+    done < <(find "$src" -name SKILL.md -exec dirname {} \; | sort -u)
+
+    for d in "$dst"/*/; do
+        [ -d "$d" ] || continue
+        local name
+        name=$(basename "$d")
+        if ! grep -qxF "$name" "$tmpfile" 2>/dev/null; then
+            rm -rf "$d"
+            log_info "已删除旧技能: $name"
+        fi
+    done
+
+    while IFS= read -r skilldir; do
+        local name
+        name=$(basename "$skilldir")
+        rm -rf "$dst/$name"
+        cp -r "$skilldir" "$dst/"
+    done < <(find "$src" -name SKILL.md -exec dirname {} \; | sort -u)
+
+    rm -f "$tmpfile"
+
+    local count
+    count=$(find "$dst" -mindepth 1 -maxdepth 1 -type d | wc -l)
+    log_info "Skills: $count 个"
+}
+
 update_dir() {
     local TRAE_DIR="$1"
     local repo_dir="$2"
@@ -25,13 +62,9 @@ update_dir() {
     log_step "更新: ${CYAN}${TRAE_DIR}${NC} (${label})"
     log_step "═══════════════════════════════════════════"
 
-    # Skills (从分类子目录扁平复制到目标)
+    # Skills (同步：新增/更新 + 自动清理已删除的技能)
     if [ -d "$repo_dir/skills" ]; then
-        mkdir -p "$TRAE_DIR/skills"
-        find "$repo_dir/skills" -mindepth 2 -maxdepth 2 -type d -exec cp -r {} "$TRAE_DIR/skills/" \;
-        local count
-        count=$(find "$TRAE_DIR/skills" -mindepth 1 -maxdepth 1 -type d | wc -l)
-        log_info "Skills: $count 个"
+        sync_skills "$repo_dir/skills" "$TRAE_DIR/skills"
     fi
 
     # Agents

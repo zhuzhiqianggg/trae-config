@@ -13,6 +13,45 @@ function Write-Green($msg)  { Write-Host "[INFO] $msg" -ForegroundColor Green }
 function Write-Yellow($msg) { Write-Host "[WARN] $msg" -ForegroundColor Yellow }
 function Write-Cyan($msg)   { Write-Host "[STEP] $msg" -ForegroundColor Cyan }
 
+function Sync-Skills {
+    param([string]$src, [string]$dst, [switch]$DryRun)
+
+    # Get skill dirs by finding all SKILL.md (works for both flat and categorized)
+    $srcSkills = Get-ChildItem -Path $src -Recurse -Filter "SKILL.md" -Depth 3 | ForEach-Object { $_.Directory } | Sort-Object -Unique
+    $srcNames = $srcSkills | ForEach-Object { $_.Name }
+
+    # Remove stale skills in target
+    if (Test-Path $dst) {
+        Get-ChildItem -Directory $dst | ForEach-Object {
+            if ($srcNames -notcontains $_.Name) {
+                if ($DryRun) {
+                    Write-Green "[DRY-RUN] Would remove: $($_.Name)"
+                } else {
+                    Remove-Item -Recurse -Force $_.FullName -ErrorAction SilentlyContinue
+                    Write-Green "Removed stale: $($_.Name)"
+                }
+            }
+        }
+    }
+
+    # Copy/overwrite source skills
+    New-Item -ItemType Directory -Path $dst -Force | Out-Null
+    foreach ($skill in $srcSkills) {
+        $target = Join-Path $dst $skill.Name
+        if ($DryRun) {
+            Write-Green "[DRY-RUN] Would install: $($skill.Name)"
+        } else {
+            if (Test-Path $target) { Remove-Item -Recurse -Force $target -ErrorAction SilentlyContinue }
+            Copy-Item -Recurse $skill.FullName $target
+        }
+    }
+
+    if (-not $DryRun) {
+        $count = (Get-ChildItem -Directory $dst).Count
+        Write-Green "Skills: $count installed"
+    }
+}
+
 function Install-ToDir {
     param([string]$traeDir, [string]$label)
 
@@ -22,13 +61,8 @@ function Install-ToDir {
 
     $src = "$CLONE_DIR\skills"
     $dst = "$traeDir\skills"
-    if ($DryRun) {
-        Write-Green "[DRY-RUN] Skills: $src -> $dst"
-    } elseif (Test-Path $src) {
-        if (Test-Path $dst) { Remove-Item -Recurse -Force $dst }
-        Copy-Item -Recurse $src $dst
-        $count = (Get-ChildItem -Directory $dst).Count
-        Write-Green "Skills: $count installed"
+    if (Test-Path $src) {
+        Sync-Skills -src $src -dst $dst -DryRun:$DryRun
     } else {
         Write-Yellow "Skills source not found, skipping"
     }

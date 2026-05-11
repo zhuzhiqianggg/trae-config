@@ -12,6 +12,32 @@ function Write-Green($msg)  { Write-Host "[INFO] $msg" -ForegroundColor Green }
 function Write-Yellow($msg) { Write-Host "[WARN] $msg" -ForegroundColor Yellow }
 function Write-Cyan($msg)   { Write-Host "[STEP] $msg" -ForegroundColor Cyan }
 
+function Sync-Skills {
+    param([string]$src, [string]$dst)
+
+    $srcSkills = Get-ChildItem -Path $src -Recurse -Filter "SKILL.md" -Depth 3 | ForEach-Object { $_.Directory } | Sort-Object -Unique
+    $srcNames = $srcSkills | ForEach-Object { $_.Name }
+
+    if (Test-Path $dst) {
+        Get-ChildItem -Directory $dst | ForEach-Object {
+            if ($srcNames -notcontains $_.Name) {
+                Remove-Item -Recurse -Force $_.FullName -ErrorAction SilentlyContinue
+                Write-Green "Removed stale: $($_.Name)"
+            }
+        }
+    }
+
+    New-Item -ItemType Directory -Path $dst -Force | Out-Null
+    foreach ($skill in $srcSkills) {
+        $target = Join-Path $dst $skill.Name
+        if (Test-Path $target) { Remove-Item -Recurse -Force $target -ErrorAction SilentlyContinue }
+        Copy-Item -Recurse $skill.FullName $target
+    }
+
+    $count = (Get-ChildItem -Directory $dst).Count
+    Write-Green "Skills: $count"
+}
+
 function Sync-TraeDir {
     param([string]$src, [string]$dst, [string]$label)
     
@@ -62,7 +88,7 @@ $dirsFound = 0
 
 if (Test-Path "$HOME\.trae-cn") {
     Write-Cyan "Syncing to: $HOME\.trae-cn (Trae-CN)"
-    Sync-TraeDir "$CLONE_DIR\skills" "$HOME\.trae-cn\skills" "Skills"
+    Sync-Skills "$CLONE_DIR\skills" "$HOME\.trae-cn\skills"
     Sync-TraeDir "$CLONE_DIR\agents" "$HOME\.trae-cn\agents" "Agents"
     Sync-TraeDir "$CLONE_DIR\rules" "$HOME\.trae-cn\rules" "Rules"
     if (Test-Path "$CLONE_DIR\user_rules.md") {
@@ -75,7 +101,7 @@ if (Test-Path "$HOME\.trae-cn") {
 
 if (Test-Path "$HOME\.trae") {
     Write-Cyan "Syncing to: $HOME\.trae (Trae Overseas)"
-    Sync-TraeDir "$CLONE_DIR\skills" "$HOME\.trae\skills" "Skills"
+    Sync-Skills "$CLONE_DIR\skills" "$HOME\.trae\skills"
     Sync-TraeDir "$CLONE_DIR\agents" "$HOME\.trae\agents" "Agents"
     Sync-TraeDir "$CLONE_DIR\rules" "$HOME\.trae\rules" "Rules"
     if (Test-Path "$CLONE_DIR\user_rules.md") {
