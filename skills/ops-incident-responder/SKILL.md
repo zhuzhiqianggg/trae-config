@@ -1,7 +1,0 @@
----
-
----
-
-
-# ops-incident-responder
-

@@ -1,7 +1,0 @@
----
-
----
-
-
-# ops-network-engineer
-

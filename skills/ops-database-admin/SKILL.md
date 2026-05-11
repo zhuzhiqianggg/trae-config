@@ -1,7 +1,0 @@
----
-
----
-
-
-# ops-database-admin
-
