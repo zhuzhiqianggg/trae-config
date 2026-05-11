@@ -73,14 +73,15 @@ try {
     }
 }
 
-# Extract
+# Extract (use temp extact + robocopy to avoid deleting CLONE_DIR while in use)
 if (Test-Path $EXTRACT_DIR) { Remove-Item -Recurse -Force $EXTRACT_DIR }
-if (Test-Path $CLONE_DIR) { Remove-Item -Recurse -Force $CLONE_DIR }
 Expand-Archive -Path $ZIP_FILE -DestinationPath $EXTRACT_DIR -Force
-Move-Item "$EXTRACT_DIR\trae-config-main" $CLONE_DIR -Force
+# robocopy exit code 0-7 all mean success
+robocopy "$EXTRACT_DIR\trae-config-main" $CLONE_DIR /MIR /NJH /NJS /NDL /NP 2>$null
+$rc = $LASTEXITCODE; if ($rc -ge 8) { throw "robocopy failed with exit code $rc" }
 Remove-Item $ZIP_FILE -Force
 Remove-Item $EXTRACT_DIR -Recurse -Force
-Write-Green "Repo ready at: $CLONE_DIR"
+Write-Green "Repo updated at: $CLONE_DIR"
 Write-Host ""
 
 # Sync to all detected Trae directories

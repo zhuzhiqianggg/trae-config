@@ -22,10 +22,10 @@ cd ~/.trae-config && bash scripts/install.sh
 
 ```powershell
 # 首次安装
-iwr "https://raw.githubusercontent.com/zhuzhiqianggg/trae-config/main/scripts/install.ps1" | iex
+iwr -UseBasicParsing "https://raw.githubusercontent.com/zhuzhiqianggg/trae-config/main/scripts/install.ps1" | iex
 
 # 更新
-iwr "https://raw.githubusercontent.com/zhuzhiqianggg/trae-config/main/scripts/update.ps1" | iex
+iwr -UseBasicParsing "https://raw.githubusercontent.com/zhuzhiqianggg/trae-config/main/scripts/update.ps1" | iex
 
 # 或本地安装
 git clone https://github.com/zhuzhiqianggg/trae-config.git $HOME\.trae-config
