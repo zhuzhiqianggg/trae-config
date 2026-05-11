@@ -8,25 +8,30 @@
 
 ## 全局配置位置
 
-- **Skills**: `~/.trae/skills/` (81 个 skills)
+- **Skills**: `~/.trae/skills/` (85 个 skills)
 - **Agents**: `~/.trae/agents/`
 - **Rules**: `~/.trae/rules/` + `~/.trae/user_rules.md`
 - **配置仓库**: https://github.com/zhuzhiqianggg/trae-config
 
-## Skills 分类
+## Skills 分类 (仓库按子目录组织，安装时自动扁平化)
 
-| 前缀 | 类别 | 数量 |
-|------|------|------|
-| `superpowers-` | 核心工作流 (TDD, 调试, 规划) | 14 |
-| `eng-` | 工程实践 (代码审查, 简化, 性能) | 21 |
-| `ops-` | 运维 (K8s, 日志, Linux, Sealos) | 11 |
-| `arch-` | 架构设计 | 5 |
-| `quality-` | 代码质量 | 3 |
-| `test-` | 测试 | 4 |
-| `devops-` | 部署运维 | 3 |
-| `sec-` | 安全 | 2 |
-| `git-` | Git | 1 |
-| `doc-` | 文档 | 4 |
+| 子目录 | 类别 | 数量 |
+|--------|------|------|
+| `core/` | 核心工作流 (Superpowers + 元技能) | 16 |
+| `eng/` | 工程实践 (代码审查, 简化, 性能) | 21 |
+| `arch/` | 架构设计 | 5 |
+| `design/` | 前端设计 (品味, UI, 可访问性) | 4 |
+| `seo/` | SEO 优化 | 5 |
+| `ops/` | 运维管理 (Docker, K8s, 监控, DB, 脚本) | 14 |
+| `devops/` | 部署运维 (IaC, CI/CD, Vercel) | 4 |
+| `sec/` | 安全 | 2 |
+| `quality/` | 代码质量 | 2 |
+| `test/` | 测试 | 2 |
+| `doc/` | 文档编写 | 2 |
+| `git/` | Git 版本控制 | 1 |
+| `react/` | React/Next.js | 3 |
+| `patterns/` | 编程模式 (错误处理, 性能, Prompt) | 3 |
+| `wsl/` | WSL2 管理 | 1 |
 
 ## 核心工作流
 

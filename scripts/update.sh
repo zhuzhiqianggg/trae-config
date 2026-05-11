@@ -25,10 +25,10 @@ update_dir() {
     log_step "更新: ${CYAN}${TRAE_DIR}${NC} (${label})"
     log_step "═══════════════════════════════════════════"
 
-    # Skills
+    # Skills (从分类子目录扁平复制到目标)
     if [ -d "$repo_dir/skills" ]; then
         mkdir -p "$TRAE_DIR/skills"
-        cp -r "$repo_dir/skills/"* "$TRAE_DIR/skills/" 2>/dev/null || true
+        find "$repo_dir/skills" -mindepth 2 -maxdepth 2 -type d -exec cp -r {} "$TRAE_DIR/skills/" \;
         local count
         count=$(find "$TRAE_DIR/skills" -mindepth 1 -maxdepth 1 -type d | wc -l)
         log_info "Skills: $count 个"

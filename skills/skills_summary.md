@@ -1,117 +1,150 @@
 # Skills Summary — Trae Config
+
 全局 Skills 索引，按分类组织。
 
-## Superpowers 核心工作流
+## Superpowers 核心工作流 (`core/`)
 | Skill | Description |
 |-------|-------------|
-| `superpowers-brainstorming` | "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation." |
+| `superpowers-brainstorming` | You MUST use this before any creative work - exploring user intent, requirements and design before implementation. |
 | `superpowers-dispatching-parallel-agents` | Use when facing 2+ independent tasks that can be worked on without shared state or sequential dependencies |
 | `superpowers-executing-plans` | Use when you have a written implementation plan to execute in a separate session with review checkpoints |
-| `superpowers-finishing-a-development-branch` | Use when implementation is complete, all tests pass, and you need to decide how to integrate the work - guides completion of development work by presenting structured options for merge, PR, or cleanup |
-| `superpowers-receiving-code-review` | Use when receiving code review feedback, before implementing suggestions, especially if feedback seems unclear or technically questionable - requires technical rigor and verification, not performative agreement or blind implementation |
-| `superpowers-requesting-code-review` | Use when completing tasks, implementing major features, or before merging to verify work meets requirements |
+| `superpowers-finishing-a-development-branch` | Use when implementation is complete, all tests pass, and you need to decide merge, PR, or cleanup |
+| `superpowers-receiving-code-review` | Use when receiving code review feedback, before implementing suggestions |
+| `superpowers-requesting-code-review` | Use when completing tasks, implementing major features, or before merging |
 | `superpowers-subagent-driven-development` | Use when executing implementation plans with independent tasks in the current session |
-| `superpowers-systematic-debugging` | Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes |
+| `superpowers-systematic-debugging` | Use when encountering any bug, test failure, or unexpected behavior |
 | `superpowers-test-driven-development` | Use when implementing any feature or bugfix, before writing implementation code |
-| `superpowers-using-git-worktrees` | Use when starting feature work that needs isolation from current workspace or before executing implementation plans - creates isolated git worktrees with smart directory selection and safety verification |
-| `superpowers-using-superpowers` | Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions |
-| `superpowers-verification-before-completion` | Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always |
-| `superpowers-writing-plans` | Use when you have a spec or requirements for a multi-step task, before touching code |
-| `superpowers-writing-skills` | Use when creating new skills, editing existing skills, or verifying skills work before deployment |
+| `superpowers-using-git-worktrees` | Creates isolated git worktrees with smart directory selection and safety verification |
+| `superpowers-using-superpowers` | Use when starting any conversation — establishes how to find and use skills |
+| `superpowers-verification-before-completion` | Requires running verification commands before claiming work is complete |
+| `superpowers-writing-plans` | Use when you have a spec or requirements for a multi-step task |
+| `superpowers-writing-skills` | Use when creating new skills, editing existing skills |
+| `core-skills-creator` | Guide the creation, review, and optimization of Trae IDE skills (SKILL.md) |
+| `core-self-improving-agent` | Log learnings, errors, and corrections for continuous improvement |
 
-## Engineering 工程实践 (addyosmani)
+## Engineering 工程实践 (`eng/`)
 | Skill | Description |
 |-------|-------------|
-| `eng-api-and-interface-design` | Guides stable API and interface design. Use when designing APIs, module boundaries, or any public interface. Use when creating REST or GraphQL endpoints, defining type contracts between modules, or establishing boundaries between frontend and backend. |
-| `eng-browser-testing-with-devtools` | Tests in real browsers. Use when building or debugging anything that runs in a browser. Use when you need to inspect the DOM, capture console errors, analyze network requests, profile performance, or verify visual output with real runtime data via Chrome DevTools MCP. |
-| `eng-ci-cd-and-automation` | Automates CI/CD pipeline setup. Use when setting up or modifying build and deployment pipelines. Use when you need to automate quality gates, configure test runners in CI, or establish deployment strategies. |
-| `eng-code-review-and-quality` | Conducts multi-axis code review. Use before merging any change. Use when reviewing code written by yourself, another agent, or a human. Use when you need to assess code quality across multiple dimensions before it enters the main branch. |
-| `eng-code-simplification` | Simplifies code for clarity. Use when refactoring code for clarity without changing behavior. Use when code works but is harder to read, maintain, or extend than it should be. Use when reviewing code that has accumulated unnecessary complexity. |
-| `eng-context-engineering` | Optimizes agent context setup. Use when starting a new session, when agent output quality degrades, when switching between tasks, or when you need to configure rules files and context for a project. |
-| `eng-debugging-and-error-recovery` | Guides systematic root-cause debugging. Use when tests fail, builds break, behavior doesn't match expectations, or you encounter any unexpected error. Use when you need a systematic approach to finding and fixing the root cause rather than guessing. |
-| `eng-deprecation-and-migration` | Manages deprecation and migration. Use when removing old systems, APIs, or features. Use when migrating users from one implementation to another. Use when deciding whether to maintain or sunset existing code. |
-| `eng-documentation-and-adrs` | Records decisions and documentation. Use when making architectural decisions, changing public APIs, shipping features, or when you need to record context that future engineers and agents will need to understand the codebase. |
-| `eng-frontend-ui-engineering` | Builds production-quality UIs. Use when building or modifying user-facing interfaces. Use when creating components, implementing layouts, managing state, or when the output needs to look and feel production-quality rather than AI-generated. |
-| `eng-git-workflow-and-versioning` | Structures git workflow practices. Use when making any code change. Use when committing, branching, resolving conflicts, or when you need to organize work across multiple parallel streams. |
-| `eng-idea-refine` | Refines ideas iteratively. Refine ideas through structured divergent and convergent thinking. Use "idea-refine" or "ideate" to trigger. |
-| `eng-incremental-implementation` | Delivers changes incrementally. Use when implementing any feature or change that touches more than one file. Use when you're about to write a large amount of code at once, or when a task feels too big to land in one step. |
-| `eng-performance-optimization` | Optimizes application performance. Use when performance requirements exist, when you suspect performance regressions, or when Core Web Vitals or load times need improvement. Use when profiling reveals bottlenecks that need fixing. |
-| `eng-planning-and-task-breakdown` | Breaks work into ordered tasks. Use when you have a spec or clear requirements and need to break work into implementable tasks. Use when a task feels too large to start, when you need to estimate scope, or when parallel work is possible. |
-| `eng-security-and-hardening` | Hardens code against vulnerabilities. Use when handling user input, authentication, data storage, or external integrations. Use when building any feature that accepts untrusted data, manages user sessions, or interacts with third-party services. |
-| `eng-shipping-and-launch` | Prepares production launches. Use when preparing to deploy to production. Use when you need a pre-launch checklist, when setting up monitoring, when planning a staged rollout, or when you need a rollback strategy. |
-| `eng-source-driven-development` | Grounds every implementation decision in official documentation. Use when you want authoritative, source-cited code free from outdated patterns. Use when building with any framework or library where correctness matters. |
-| `eng-spec-driven-development` | Creates specs before coding. Use when starting a new project, feature, or significant change and no specification exists yet. Use when requirements are unclear, ambiguous, or only exist as a vague idea. |
-| `eng-test-driven-development` | Drives development with tests. Use when implementing any logic, fixing any bug, or changing any behavior. Use when you need to prove that code works, when a bug report arrives, or when you're about to modify existing functionality. |
-| `eng-using-agent-skills` | Discovers and invokes agent skills. Use when starting a session or when you need to discover which skill applies to the current task. This is the meta-skill that governs how all other skills are discovered and invoked. |
+| `eng-api-and-interface-design` | Guides stable API and interface design. Contract-first, Hyrum's Law, error semantics |
+| `eng-browser-testing-with-devtools` | Tests in real browsers via Chrome DevTools MCP |
+| `eng-ci-cd-and-automation` | Automates CI/CD pipeline setup with quality gates |
+| `eng-code-review-and-quality` | Multi-axis code review (correctness/readability/architecture/security/performance) |
+| `eng-code-simplification` | Simplifies code for clarity while preserving behavior |
+| `eng-context-engineering` | Optimizes agent context setup and quality |
+| `eng-debugging-and-error-recovery` | Systematic root-cause debugging (reproduce-localize-reduce-fix-guard) |
+| `eng-deprecation-and-migration` | Manages deprecation and migration (Strangler Fig, adapter patterns) |
+| `eng-documentation-and-adrs` | Records decisions and documentation (ADR, API docs, README) |
+| `eng-frontend-ui-engineering` | Builds production-quality UIs with component architecture, a11y, responsive design |
+| `eng-git-workflow-and-versioning` | Git workflow practices: trunk-based, atomic commits, worktrees |
+| `eng-idea-refine` | Iterative idea refinement through divergent and convergent thinking |
+| `eng-incremental-implementation` | Thin vertical slices — implement, test, verify, commit |
+| `eng-performance-optimization` | Measure-first performance optimization (Core Web Vitals, bundle analysis) |
+| `eng-planning-and-task-breakdown` | Dependency graph > vertical slices > task templates > checkpoints |
+| `eng-security-and-hardening` | OWASP Top 10 prevention, auth patterns, secrets management |
+| `eng-shipping-and-launch` | Pre-launch checklists, feature flags, staged rollouts |
+| `eng-source-driven-development` | Ground every implementation decision in official documentation |
+| `eng-spec-driven-development` | Creates specs before coding with four-phase gate |
+| `eng-test-driven-development` | Red-Green-Refactor, test pyramid, DAMP over DRY |
+| `eng-using-agent-skills` | Meta-skill for discovering and invoking agent skills |
 
-## Architecture 架构设计
+## Architecture 架构设计 (`arch/`)
 | Skill | Description |
 |-------|-------------|
-| `arch-api-design-principles` | Master REST and GraphQL API design principles to build intuitive, scalable, and maintainable APIs that delight developers. Use when designing new APIs, reviewing API specifications, or establishing API design standards. |
-| `arch-architecture-patterns` | Implement proven backend architecture patterns including Clean Architecture, Hexagonal Architecture, and Domain-Driven Design. Use when architecting complex backend systems or refactoring existing applications for better maintainability. |
-| `arch-backend-architect` | Expert backend architect specializing in scalable API design, |
-| `arch-cloud-architect` | Expert cloud architect specializing in AWS/Azure/GCP multi-cloud |
-| `arch-software-architecture` | Guide for quality focused software architecture. This skill should be used when users want to write code, design architecture, analyze code, in any case that relates to software development. |
+| `arch-api-design-principles` | REST and GraphQL API design principles, scalable and maintainable |
+| `arch-architecture-patterns` | Clean Architecture, Hexagonal Architecture, Domain-Driven Design |
+| `arch-backend-architect` | Expert backend architect: API design, microservices, event-driven, auth, observability |
+| `arch-cloud-architect` | Cloud architect: AWS/Azure/GCP multi-cloud, IaC, FinOps, disaster recovery |
+| `arch-software-architecture` | Quality-focused software architecture with Clean Architecture + DDD |
 
-## Code Quality 代码质量
+## Frontend Design 前端设计 (`design/`)
+| Skill | Description | Source |
+|-------|-------------|--------|
+| `taste-skill` | High-agency frontend design with metric-based rules, anti-slop patterns, premium aesthetic. 9 design dimensions with configurable variance/motion/density dials | leonxlnx/taste-skill (14.9k ⭐) |
+| `frontend-design` | Create distinctive, production-grade frontend interfaces with intentional aesthetics and DFII scoring | agent-skills-hub (Anthropic) |
+| `effective-ui-design` | WCAG 2.1 AA accessibility, OKLCH color palettes, 8pt spacing grid, fluid typography, form patterns, dark mode, SEO meta tags, Core Web Vitals | sebastian-software/effective-ui-design-skill |
+| `impeccable-design` | Enhanced frontend design with 17 commands (/audit, /polish, /animate), 7 reference domains, curated anti-patterns | thatBrian/impeccable |
+
+## SEO 搜索引擎优化 (`seo/`)
 | Skill | Description |
 |-------|-------------|
-| `quality-architect-review` | Master software architect specializing in modern architecture |
-| `quality-clean-code` | Pragmatic coding standards - concise, direct, no over-engineering, no unnecessary comments |
-| `quality-code-refactoring` | "You are a code refactoring expert specializing in clean code principles, SOLID design patterns, and modern software engineering best practices. Analyze and refactor the provided code to improve its quality, maintainability, and performance." |
+| `seo-fundamentals` | Core SEO principles: E-E-A-T, Core Web Vitals, technical foundations, content quality |
+| `seo-audit` | Comprehensive SEO audit: crawlability, indexation, on-page, content quality, technical issues |
+| `seo-content-writer` | SEO-optimized content writing with keyword strategy, E-E-A-T signals, content frameworks |
+| `programmatic-seo` | Create SEO-driven pages at scale using templates and data (12 playbooks) |
+| `ai-seo` | Optimize content for AI search engines: ChatGPT, Perplexity, Google AI Overviews, Gemini, Claude |
 
-## Testing 测试
+## Operations 运维管理 (`ops/`)
 | Skill | Description |
 |-------|-------------|
-| `test-api-testing` | "You are an API mocking expert specializing in realistic mock services for development, testing, and demos. Design mocks that simulate real API behavior and enable parallel development." |
-| `test-test-automator` | Master AI-powered test automation with modern frameworks, |
-| `test-testing-patterns` | Jest testing patterns, factory functions, mocking strategies, and TDD workflow. Use when writing unit tests, creating test factories, or following TDD red-green-refactor cycle. |
+| `ops-linux-troubleshooter` | Linux 系统问题排查：CPU/内存/磁盘/网络问题诊断与解决 |
+| `ops-log-analysis` | Linux/Docker/Kubernetes/Nginx 日志收集和分析 |
+| `database-admin` | Database administration: setup, backup, monitoring, user management, migration |
+| `database-optimizer` | Database performance optimization: indexing, query tuning, schema design, connection pooling |
+| `docker-essentials` | Essential Docker commands and workflows for container management, image operations, debugging |
+| `kubernetes-devops` | Production-ready K8s manifest generation with security contexts, health checks, Helm charts |
+| `monitoring` | Complete observability: Prometheus/Grafana/Loki/Sentry, alerting, SLOs, cost comparison |
+| `devops-automation-pack` | DevOps automation: Docker/K8s/CI-CD/monitoring/backup scripts and templates |
+| `postgres-best-practices` | PostgreSQL best practices: schema design, indexing, migration, configuration, backup |
+| `incident-responder` | Incident response: severity levels, runbooks, communication, post-mortem patterns |
+| `network-engineer` | Network engineering: DNS, TCP/IP, load balancing, firewall, VPN, CDN configuration |
+| `gitops-workflow` | GitOps workflow with ArgoCD/Flux: declarative infrastructure, sync strategies |
+| `bash-pro` | Advanced Bash scripting: error handling, argument parsing, safety guards, performance patterns |
+| `github-actions-templates` | GitHub Actions workflow templates for CI/CD, testing, deployment |
 
-## Operations 运维管理
+## DevOps 部署运维 (`devops/`)
 | Skill | Description |
 |-------|-------------|
-| `ops-database-admin` | Expert database administrator specializing in modern database operations |
-| `ops-database-optimizer` | Database performance optimization expert |
-| `ops-deployment-engineer` | Expert deployment engineer specializing in modern deployment strategies |
-| `ops-devops-troubleshooter` | Master DevOps troubleshooting expert |
-| `ops-incident-responder` | Expert incident responder for production issues |
-| `ops-kubernetes-architect` | Expert Kubernetes architect |
-| `ops-linux-troubleshooter` | Linux 系统问题排查专家：CPU/内存/磁盘/网络问题诊断与解决 |
-| `ops-log-analysis` | Linux/Docker/Kubernetes/Nginx 日志收集和分析专家 |
-| `ops-network-engineer` | Expert network engineer |
-| `ops-openclaw` | OpenClaw 运维管理：安装、配置、渠道管理、Gateway 运维、多 Agent 路由、故障排查、安全加固（来源：stellariums/openclaw-skill） |
-| `ops-sealos` | Sealos 集群运维：安装、配置、故障排查、常用操作命令 |
-| `ops-terraform-specialist` | Expert Terraform/OpenTofu specialist |
+| `devops-terraform` | Terraform/OpenTofu IaC automation, state management, multi-cloud deployment |
+| `devops-terraform-engineer` | Senior Terraform engineer: modules, state, multi-cloud, testing, CI/CD |
+| `devops-troubleshooter` | DevOps troubleshooting: CI/CD failures, infrastructure issues, deployment problems |
+| `devops-vercel-deployment` | Vercel + Next.js deployment: env vars, Edge vs Serverless, preview deploys |
 
-## WSL 管理
+## Security 安全 (`sec/`)
 | Skill | Description |
 |-------|-------------|
-| `wsl-manager` | WSL2 综合管理：网络问题排查、发行版配置、维护任务、性能优化。当用户遇到 WSL 网络/DNS 问题、需要配置发行版或优化 WSL 时触发 |
+| `sec-api-security` | Secure API design: authentication, authorization, input validation, rate limiting, OWASP API Top 10 |
+| `sec-security-review` | Security review checklist: secrets, input validation, SQL injection, XSS/CSRF |
 
-## DevOps 部署运维
+## Code Quality 代码质量 (`quality/`)
 | Skill | Description |
 |-------|-------------|
-| `devops-cicd-automation` | "You are a workflow automation expert specializing in creating efficient CI/CD pipelines, GitHub Actions workflows, and automated development processes. Design automation that reduces manual work, improves consistency, and accelerates delivery while maintaining quality and security." |
-| `devops-terraform` | Expert Terraform/OpenTofu specialist mastering advanced IaC |
-| `devops-vercel-deployment` | "Expert knowledge for deploying to Vercel with Next.js Use when: vercel, deploy, deployment, hosting, production." |
+| `quality-architect-review` | Architecture review: system design, scalability, maintainability |
+| `quality-clean-code` | Clean code standards: SRP/DRY/KISS/YAGNI, naming, function rules |
 
-## Security 安全
+## Testing 测试 (`test/`)
 | Skill | Description |
 |-------|-------------|
-| `sec-api-security` | "Implement secure API design patterns including authentication, authorization, input validation, rate limiting, and protection against common API vulnerabilities" |
-| `sec-security-review` | Use this skill when adding authentication, handling user input, working with secrets, creating API endpoints, or implementing payment/sensitive features. Provides comprehensive security checklist and patterns. |
+| `test-test-automator` | AI-powered test automation with Playwright/Selenium/Appium, CI/CD integration |
+| `test-testing-patterns` | Jest testing patterns, factory functions, mocking strategies, TDD workflow |
 
-## Git 版本控制
+## Documentation 文档编写 (`doc/`)
 | Skill | Description |
 |-------|-------------|
-| `git-using-git-worktrees` | Use when starting feature work that needs isolation from current workspace or before executing implementation plans - creates isolated git worktrees with smart directory selection and safety verification |
+| `doc-api-documentation` | Comprehensive API documentation with endpoints, parameters, examples |
+| `doc-architecture-decision-records` | ADR writing and maintenance with 5 template types |
 
-## Documentation 文档编写
+## Git 版本控制 (`git/`)
 | Skill | Description |
 |-------|-------------|
-| `doc-api-documentation` | "Generate comprehensive, developer-friendly API documentation from code, including endpoints, parameters, examples, and best practices" |
-| `doc-architecture-decision-records` | Write and maintain Architecture Decision Records (ADRs) following best practices for technical decision documentation. Use when documenting significant technical decisions, reviewing past architectural choices, or establishing decision processes. |
-| `doc-code-documentation` | "You are a code education expert specializing in explaining complex code through clear narratives, visual diagrams, and step-by-step breakdowns. Transform difficult concepts into understandable explanations." |
-| `doc-doc-generate` | "You are a documentation expert specializing in creating comprehensive, maintainable documentation from code. Generate API docs, architecture diagrams, user guides, and technical references using AI-powered analysis and industry best practices." |
+| `git-using-git-worktrees` | Git worktree isolation for parallel development branches |
 
-**Total: 69 skills**
+## React & Next.js (`react/`)
+| Skill | Description |
+|-------|-------------|
+| `react-patterns` | Modern React patterns: hooks, composition, performance, TypeScript, React 19 |
+| `react-state-management` | State management with Redux Toolkit, Zustand, Jotai, React Query |
+| `nextjs-app-router-patterns` | Next.js 14+ App Router: Server Components, streaming, parallel routes, data fetching |
+
+## Programming Patterns (`patterns/`)
+| Skill | Description |
+|-------|-------------|
+| `error-handling-patterns` | Cross-language error handling: exceptions, Result types, circuit breaker, graceful degradation |
+| `web-performance-optimization` | Web performance: Core Web Vitals, bundle optimization, caching, image optimization |
+| `prompt-engineering` | Prompt engineering: few-shot, chain-of-thought, system prompts, optimization techniques |
+
+## WSL 管理 (`wsl/`)
+| Skill | Description |
+|-------|-------------|
+| `wsl-manager` | WSL2 综合管理：网络/DNS 问题排查、发行版配置、性能优化 |
+
+**Total: 85 skills** (16 core + 69 others)

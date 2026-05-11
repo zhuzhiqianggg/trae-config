@@ -34,20 +34,25 @@ cd $HOME\.trae-config; .\scripts\install.ps1
 
 ## Skills 分类
 
-| 前缀 | 类别 | 数量 | 来源 |
-|------|------|------|------|
-| `superpowers-` | 核心工作流 (TDD, 调试, 规划等) | 14 | [obra/superpowers](https://github.com/obra/superpowers) |
-| `eng-` | 工程实践 (代码审查, 简化, 性能等) | 21 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) |
-| `ops-` | 运维 (K8s, 日志分析, Linux排查, Sealos) | 11 | [TideTree/claude-agents-zh](https://github.com/TideTree/claude-code-agents-zh) + 自编 |
-| `arch-` | 架构设计 (API, 模式, 云架构等) | 5 | [agent-skills-hub](https://github.com/agent-skills-hub/agent-skills-hub) |
-| `quality-` | 代码质量 (clean code, 重构等) | 3 | agent-skills-hub |
-| `test-` | 测试 (模式, API 测试等) | 3 | agent-skills-hub |
-| `devops-` | 部署运维 (CI/CD, Terraform, Vercel) | 3 | agent-skills-hub |
-| `sec-` | 安全 (API 安全, 安全审查) | 2 | agent-skills-hub |
-| `git-` | Git 版本控制 | 1 | agent-skills-hub |
-| `doc-` | 文档编写 (ADR, API 文档等) | 4 | agent-skills-hub |
+| 分类 | 子目录 | 数量 | 来源 |
+|------|--------|------|------|
+| 核心工作流 | `core/` | 16 | [obra/superpowers](https://github.com/obra/superpowers) + ClawHub |
+| 工程实践 | `eng/` | 21 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) |
+| 架构设计 | `arch/` | 5 | agent-skills-hub |
+| 前端设计 | `design/` | 4 | leonxlnx/taste-skill + agent-skills-hub |
+| SEO 优化 | `seo/` | 5 | agent-skills-hub |
+| 运维管理 | `ops/` | 14 | ClawHub + 自编 |
+| 部署运维 | `devops/` | 4 | agent-skills-hub |
+| 安全 | `sec/` | 2 | agent-skills-hub |
+| 代码质量 | `quality/` | 2 | agent-skills-hub |
+| 测试 | `test/` | 2 | agent-skills-hub |
+| 文档编写 | `doc/` | 2 | agent-skills-hub |
+| Git 版本控制 | `git/` | 1 | agent-skills-hub |
+| React/Next.js | `react/` | 3 | agent-skills-hub |
+| 编程模式 | `patterns/` | 3 | agent-skills-hub |
+| WSL 管理 | `wsl/` | 1 | 自编 |
 
-**总计: 67 skills**
+**总计: 85 skills** (16 核心工作流 + 69 专业技能)
 
 完整索引: [skills/skills_summary.md](skills/skills_summary.md)
 
@@ -55,33 +60,39 @@ cd $HOME\.trae-config; .\scripts\install.ps1
 
 ```
 .
-├── skills/           # 全局 Skills (56个)
-│   ├── superpowers-*/        # Superpowers 核心
-│   ├── eng-*/                # Engineering 工程实践
-│   ├── arch-*/               # Architecture 架构
-│   ├── quality-*/            # Quality 代码质量
-│   ├── test-*/               # Testing 测试
-│   ├── devops-*/             # DevOps 运维
-│   ├── sec-*/                # Security 安全
-│   ├── git-*/                # Git 版本控制
-│   ├── doc-*/                # Documentation 文档
-│   └── skills_summary.md     # Skills 索引
-├── agents/           # Agent prompt 模板
+├── skills/                 # 全局 Skills (85个，按分类子目录组织)
+│   ├── core/               # 核心工作流 (16 superpowers + meta-skills)
+│   ├── eng/                # 工程实践 (21)
+│   ├── arch/               # 架构设计 (5)
+│   ├── design/             # 前端设计 (4)
+│   ├── seo/                # SEO 优化 (5)
+│   ├── ops/                # 运维管理 (14)
+│   ├── devops/             # 部署运维 (4)
+│   ├── sec/                # 安全 (2)
+│   ├── quality/            # 代码质量 (2)
+│   ├── test/               # 测试 (2)
+│   ├── doc/                # 文档编写 (2)
+│   ├── git/                # Git 版本控制 (1)
+│   ├── react/              # React/Next.js (3)
+│   ├── patterns/           # 编程模式 (3)
+│   ├── wsl/                # WSL 管理 (1)
+│   └── skills_summary.md   # Skills 完整索引
+├── agents/                 # Agent prompt 模板
 │   ├── code-reviewer.md
 │   ├── implementer.md
 │   ├── spec-reviewer.md
 │   └── code-quality-reviewer.md
-├── rules/            # 规则文档模板
+├── rules/                  # 规则文档模板
 │   ├── requirements.md
 │   ├── project_memory.md
 │   ├── lessons_learned.md
 │   └── 项目规则.md
-├── scripts/          # 安装/更新脚本
-│   ├── install.sh    # Linux 安装
-│   ├── update.sh     # Linux 更新
-│   ├── install.ps1   # Windows 安装
-│   └── update.ps1    # Windows 更新
-└── user_rules.md     # 全局用户规则
+├── scripts/                # 安装/更新脚本
+│   ├── install.sh          # Linux 安装
+│   ├── update.sh           # Linux 更新
+│   ├── install.ps1         # Windows 安装
+│   └── update.ps1          # Windows 更新
+└── user_rules.md           # 全局用户规则
 ```
 
 ## 多机器同步

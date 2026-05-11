@@ -73,14 +73,14 @@ install_to_dir() {
     log_step "安装到: ${CYAN}${TRAE_DIR}${NC} (${label})"
     log_step "═══════════════════════════════════════════"
 
-    # Skills
+    # Skills (从分类子目录扁平复制到目标)
     local src="$repo_dir/skills"
     local dst="$TRAE_DIR/skills"
     if [ "$DRY_RUN" = true ]; then
         log_info "[DRY-RUN] 将安装 Skills: $src -> $dst"
     elif [ -d "$src" ]; then
         mkdir -p "$dst"
-        cp -r "$src/"* "$dst/" 2>/dev/null || true
+        find "$src" -mindepth 2 -maxdepth 2 -type d -exec cp -r {} "$dst/" \;
         local count
         count=$(find "$dst" -mindepth 1 -maxdepth 1 -type d | wc -l)
         log_info "Skills: $count 个"
