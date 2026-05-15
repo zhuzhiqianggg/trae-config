@@ -8,9 +8,10 @@
 
 ## 全局配置位置
 
-- **Skills**: `~/.trae/skills/` (85 个 skills)
+- **Skills**: `~/.trae/skills/` (86 个 skills)
 - **Agents**: `~/.trae/agents/`
 - **Rules**: `~/.trae/rules/` + `~/.trae/user_rules.md`
+- **Settings**: `~/.trae/settings/` (MCP 模板、编辑器配置)
 - **配置仓库**: https://github.com/zhuzhiqianggg/trae-config
 
 ## Skills 分类 (仓库按子目录组织，安装时自动扁平化)
@@ -22,7 +23,7 @@
 | `arch/` | 架构设计 | 5 |
 | `design/` | 前端设计 (品味, UI, 可访问性) | 4 |
 | `seo/` | SEO 优化 | 5 |
-| `ops/` | 运维管理 (Docker, K8s, 监控, DB, 脚本) | 14 |
+| `ops/` | 运维管理 (Docker, K8s, 监控, DB, 脚本, MCP) | 15 |
 | `devops/` | 部署运维 (IaC, CI/CD, Vercel) | 4 |
 | `sec/` | 安全 | 2 |
 | `quality/` | 代码质量 | 2 |

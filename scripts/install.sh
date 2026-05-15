@@ -161,6 +161,17 @@ install_to_dir() {
         log_info "Rules: $(ls "$dst" | tr '\n' ', ')"
     fi
 
+    # Settings 参考
+    src="$repo_dir/settings"
+    dst="$TRAE_DIR/settings"
+    if [ "$DRY_RUN" = true ]; then
+        log_info "[DRY-RUN] 将安装 Settings: $src -> $dst"
+    elif [ -d "$src" ]; then
+        mkdir -p "$dst"
+        cp "$src/"* "$dst/" 2>/dev/null || true
+        log_info "Settings: $(ls "$dst" | tr '\n' ', ')"
+    fi
+
     # user_rules.md
     src="$repo_dir/user_rules.md"
     dst="$TRAE_DIR/user_rules.md"

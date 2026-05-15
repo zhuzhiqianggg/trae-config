@@ -90,6 +90,7 @@
 | `gitops-workflow` | GitOps workflow with ArgoCD/Flux: declarative infrastructure, sync strategies |
 | `bash-pro` | Advanced Bash scripting: error handling, argument parsing, safety guards, performance patterns |
 | `github-actions-templates` | GitHub Actions workflow templates for CI/CD, testing, deployment |
+| `trae-mcp-servers` | Configure and use MCP servers in Trae IDE (Playwright, GitHub, Filesystem, etc.) |
 
 ## DevOps 部署运维 (`devops/`)
 | Skill | Description |
@@ -147,4 +148,4 @@
 |-------|-------------|
 | `wsl-manager` | WSL2 综合管理：网络/DNS 问题排查、发行版配置、性能优化 |
 
-**Total: 85 skills** (16 core + 69 others)
+**Total: 86 skills** (16 core + 70 others)

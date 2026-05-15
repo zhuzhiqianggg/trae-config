@@ -99,6 +99,19 @@ function Install-ToDir {
         Write-Yellow "Rules source not found, skipping"
     }
 
+    $src = "$CLONE_DIR\settings"
+    $dst = "$traeDir\settings"
+    if ($DryRun) {
+        Write-Green "[DRY-RUN] Settings: $src -> $dst"
+    } elseif (Test-Path $src) {
+        if (Test-Path $dst) { Remove-Item -Recurse -Force $dst }
+        Copy-Item -Recurse $src $dst
+        $names = (Get-ChildItem $dst).Name -join ", "
+        Write-Green "Settings: $names"
+    } else {
+        Write-Yellow "Settings source not found, skipping"
+    }
+
     $src = "$CLONE_DIR\user_rules.md"
     $dst = "$traeDir\user_rules.md"
     if ($DryRun) {

@@ -41,7 +41,7 @@ cd $HOME\.trae-config; .\scripts\install.ps1
 | 架构设计 | `arch/` | 5 | agent-skills-hub |
 | 前端设计 | `design/` | 4 | leonxlnx/taste-skill + agent-skills-hub |
 | SEO 优化 | `seo/` | 5 | agent-skills-hub |
-| 运维管理 | `ops/` | 14 | ClawHub + 自编 |
+| 运维管理 | `ops/` | 15 | ClawHub + 自编 |
 | 部署运维 | `devops/` | 4 | agent-skills-hub |
 | 安全 | `sec/` | 2 | agent-skills-hub |
 | 代码质量 | `quality/` | 2 | agent-skills-hub |
@@ -52,7 +52,7 @@ cd $HOME\.trae-config; .\scripts\install.ps1
 | 编程模式 | `patterns/` | 3 | agent-skills-hub |
 | WSL 管理 | `wsl/` | 1 | 自编 |
 
-**总计: 85 skills** (16 核心工作流 + 69 专业技能)
+**总计: 86 skills** (16 核心工作流 + 70 专业技能)
 
 完整索引: [skills/skills_summary.md](skills/skills_summary.md)
 
@@ -60,7 +60,7 @@ cd $HOME\.trae-config; .\scripts\install.ps1
 
 ```
 .
-├── skills/                 # 全局 Skills (85个，按分类子目录组织)
+├── skills/                 # 全局 Skills (86个，按分类子目录组织)
 │   ├── core/               # 核心工作流 (16 superpowers + meta-skills)
 │   ├── eng/                # 工程实践 (21)
 │   ├── arch/               # 架构设计 (5)
@@ -87,6 +87,12 @@ cd $HOME\.trae-config; .\scripts\install.ps1
 │   ├── project_memory.md
 │   ├── lessons_learned.md
 │   └── 项目规则.md
+├── settings/               # 配置参考（MCP 服务器、编辑设置）
+│   ├── mcp-servers.md      # MCP 服务器配置模板
+│   └── trae-settings.md    # Trae IDE 推荐设置
+├── settings/               # 配置参考（MCP 服务器、编辑设置）
+│   ├── mcp-servers.md      # MCP 服务器配置模板
+│   └── trae-settings.md    # Trae IDE 推荐设置
 ├── scripts/                # 安装/更新脚本
 │   ├── install.sh          # Linux 安装
 │   ├── update.sh           # Linux 更新

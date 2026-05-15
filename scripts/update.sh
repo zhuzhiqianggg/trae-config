@@ -87,6 +87,13 @@ update_dir() {
         log_info "Rules: $(ls "$TRAE_DIR/rules" | tr '\n' ', ')"
     fi
 
+    # Settings 参考
+    if [ -d "$repo_dir/settings" ]; then
+        mkdir -p "$TRAE_DIR/settings"
+        cp "$repo_dir/settings/"* "$TRAE_DIR/settings/" 2>/dev/null || true
+        log_info "Settings: $(ls "$TRAE_DIR/settings" | tr '\n' ', ')"
+    fi
+
     # user_rules.md
     if [ -f "$repo_dir/user_rules.md" ]; then
         cp "$repo_dir/user_rules.md" "$TRAE_DIR/user_rules.md"
