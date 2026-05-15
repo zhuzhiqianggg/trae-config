@@ -8,10 +8,10 @@
 
 ## 全局配置位置
 
-- **Skills**: `~/.trae/skills/` (86 个 skills)
-- **Agents**: `~/.trae/agents/`
+- **Skills**: `~/.trae/skills/` (88 个 skills)
+- **Agents**: `~/.trae/agents/` (7 个 agent prompts: code-reviewer, code-quality-reviewer, implementer, performance-reviewer, security-reviewer, spec-reviewer, testing-agent)
+- **Settings**: `~/.trae/settings/` (MCP 模板、编辑器配置、功能全景图)
 - **Rules**: `~/.trae/rules/` + `~/.trae/user_rules.md`
-- **Settings**: `~/.trae/settings/` (MCP 模板、编辑器配置)
 - **配置仓库**: https://github.com/zhuzhiqianggg/trae-config
 
 ## Skills 分类 (仓库按子目录组织，安装时自动扁平化)
@@ -19,7 +19,7 @@
 | 子目录 | 类别 | 数量 |
 |--------|------|------|
 | `core/` | 核心工作流 (Superpowers + 元技能) | 16 |
-| `eng/` | 工程实践 (代码审查, 简化, 性能) | 21 |
+| `eng/` | 工程实践 (代码审查, 简化, 性能, 重构, 可访问性) | 23 |
 | `arch/` | 架构设计 | 5 |
 | `design/` | 前端设计 (品味, UI, 可访问性) | 4 |
 | `seo/` | SEO 优化 | 5 |

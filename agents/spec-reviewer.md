@@ -34,9 +34,18 @@ Task tool (general-purpose):
     - Check for missing pieces they claimed to implement
     - Look for extra features they didn't mention
 
-    ## Your Job
+    ## Verification Matrix
 
-    Read the implementation code and verify:
+    | Requirement | Status | Evidence |
+    |-------------|--------|----------|
+    | [requirement 1] | ✅/❌/⚠️ | file:line |
+    | [requirement 2] | ✅/❌/⚠️ | file:line |
+
+    Fill this out by reading code, not trusting the report.
+
+    ## Check Each Requirement
+
+    Read the implementation code and verify for each requirement:
 
     **Missing requirements:**
     - Did they implement everything that was requested?
@@ -56,6 +65,7 @@ Task tool (general-purpose):
     **Verify by reading code, not by trusting report.**
 
     Report:
-    - ✅ Spec compliant (if everything matches after code inspection)
-    - ❌ Issues found: [list specifically what's missing or extra, with file:line references]
+    - ✅ **Spec compliant** (all requirements met after code inspection)
+    - ❌ **Issues found**: [list specifically what's missing or extra, with file:line references]
+    - 📊 **Compliance score**: [number] / [total] requirements met
 ```

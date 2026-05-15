@@ -46,6 +46,8 @@
 | `eng-spec-driven-development` | Creates specs before coding with four-phase gate |
 | `eng-test-driven-development` | Red-Green-Refactor, test pyramid, DAMP over DRY |
 | `eng-using-agent-skills` | Meta-skill for discovering and invoking agent skills |
+| `eng-code-refactoring` | Systematic code refactoring patterns (extract, simplify, DRY, conditional cleanup) |
+| `eng-accessibility-review` | WCAG 2.1 AA compliance audit and remediation for web applications |
 
 ## Architecture 架构设计 (`arch/`)
 | Skill | Description |
@@ -148,4 +150,4 @@
 |-------|-------------|
 | `wsl-manager` | WSL2 综合管理：网络/DNS 问题排查、发行版配置、性能优化 |
 
-**Total: 86 skills** (16 core + 70 others)
+**Total: 88 skills** (16 core + 72 others)

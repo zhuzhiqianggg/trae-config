@@ -37,7 +37,7 @@ cd $HOME\.trae-config; .\scripts\install.ps1
 | 分类 | 子目录 | 数量 | 来源 |
 |------|--------|------|------|
 | 核心工作流 | `core/` | 16 | [obra/superpowers](https://github.com/obra/superpowers) + ClawHub |
-| 工程实践 | `eng/` | 21 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) |
+| 工程实践 | `eng/` | 23 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) |
 | 架构设计 | `arch/` | 5 | agent-skills-hub |
 | 前端设计 | `design/` | 4 | leonxlnx/taste-skill + agent-skills-hub |
 | SEO 优化 | `seo/` | 5 | agent-skills-hub |
@@ -52,7 +52,7 @@ cd $HOME\.trae-config; .\scripts\install.ps1
 | 编程模式 | `patterns/` | 3 | agent-skills-hub |
 | WSL 管理 | `wsl/` | 1 | 自编 |
 
-**总计: 86 skills** (16 核心工作流 + 70 专业技能)
+**总计: 88 skills** (16 核心工作流 + 72 专业技能)
 
 完整索引: [skills/skills_summary.md](skills/skills_summary.md)
 
@@ -60,9 +60,9 @@ cd $HOME\.trae-config; .\scripts\install.ps1
 
 ```
 .
-├── skills/                 # 全局 Skills (86个，按分类子目录组织)
+├── skills/                 # 全局 Skills (88个，按分类子目录组织)
 │   ├── core/               # 核心工作流 (16 superpowers + meta-skills)
-│   ├── eng/                # 工程实践 (21)
+│   ├── eng/                # 工程实践 (23)
 │   ├── arch/               # 架构设计 (5)
 │   ├── design/             # 前端设计 (4)
 │   ├── seo/                # SEO 优化 (5)
@@ -77,11 +77,14 @@ cd $HOME\.trae-config; .\scripts\install.ps1
 │   ├── patterns/           # 编程模式 (3)
 │   ├── wsl/                # WSL 管理 (1)
 │   └── skills_summary.md   # Skills 完整索引
-├── agents/                 # Agent prompt 模板
+├── agents/                 # Agent prompt 模板 (7个)
 │   ├── code-reviewer.md
+│   ├── code-quality-reviewer.md
 │   ├── implementer.md
+│   ├── performance-reviewer.md
+│   ├── security-reviewer.md
 │   ├── spec-reviewer.md
-│   └── code-quality-reviewer.md
+│   └── testing-agent.md
 ├── rules/                  # 规则文档模板
 │   ├── requirements.md
 │   ├── project_memory.md

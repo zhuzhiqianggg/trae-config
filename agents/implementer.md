@@ -2,6 +2,8 @@
 
 Use this template when dispatching an implementer subagent.
 
+**Purpose:** Execute a specific task from a plan, producing well-tested code.
+
 ```
 Task tool (general-purpose):
   description: "Implement Task N: [task name]"
@@ -14,7 +16,18 @@ Task tool (general-purpose):
 
     ## Context
 
-    [Scene-setting: where this fits, dependencies, architectural context]
+    [Where this fits, dependencies, architectural context]
+
+    ## Available Tools (MCP)
+
+    You may have access to these tools if configured:
+    - Playwright MCP: for browser testing / UI verification
+    - GitHub MCP: for PR, issue, or repo operations
+    - Filesystem MCP: for file operations outside project
+    - Sequential Thinking: for complex problem decomposition
+    - PostgreSQL MCP: if database queries are needed
+
+    Use the right tool for the job. Don't manually do what a tool can do.
 
     ## Before You Begin
 
@@ -31,7 +44,7 @@ Task tool (general-purpose):
     Once you're clear on requirements:
     1. Implement exactly what the task specifies
     2. Write tests (following TDD if task says to)
-    3. Verify implementation works
+    3. Verify implementation works (run tests, lint, typecheck)
     4. Commit your work
     5. Self-review (see below)
     6. Report back
@@ -43,12 +56,10 @@ Task tool (general-purpose):
 
     ## Code Organization
 
-    You reason best about code you can hold in context at once, and your edits are more
-    reliable when files are focused. Keep this in mind:
     - Follow the file structure defined in the plan
     - Each file should have one clear responsibility with a well-defined interface
     - If a file you're creating is growing beyond the plan's intent, stop and report
-      it as DONE_WITH_CONCERNS — don't split files on your own without plan guidance
+      as DONE_WITH_CONCERNS
     - If an existing file you're modifying is already large or tangled, work carefully
       and note it as a concern in your report
     - In existing codebases, follow established patterns. Improve code you're touching
@@ -56,24 +67,21 @@ Task tool (general-purpose):
 
     ## When You're in Over Your Head
 
-    It is always OK to stop and say "this is too hard for me." Bad work is worse than
-    no work. You will not be penalized for escalating.
+    It is always OK to stop and say "this is too hard." Bad work is worse than no work.
 
     **STOP and escalate when:**
     - The task requires architectural decisions with multiple valid approaches
     - You need to understand code beyond what was provided and can't find clarity
     - You feel uncertain about whether your approach is correct
     - The task involves restructuring existing code in ways the plan didn't anticipate
-    - You've been reading file after file trying to understand the system without progress
+    - You've been reading file after file without progress
 
-    **How to escalate:** Report back with status BLOCKED or NEEDS_CONTEXT. Describe
-    specifically what you're stuck on, what you've tried, and what kind of help you need.
-    The controller can provide more context, re-dispatch with a more capable model,
-    or break the task into smaller pieces.
+    **How to escalate:** Report with status BLOCKED or NEEDS_CONTEXT. Describe
+    what you're stuck on, what you've tried, and what kind of help you need.
 
     ## Before Reporting Back: Self-Review
 
-    Review your work with fresh eyes. Ask yourself:
+    Review your work with fresh eyes:
 
     **Completeness:**
     - Did I fully implement everything in the spec?
@@ -82,7 +90,7 @@ Task tool (general-purpose):
 
     **Quality:**
     - Is this my best work?
-    - Are names clear and accurate (match what things do, not how they work)?
+    - Are names clear and accurate?
     - Is the code clean and maintainable?
 
     **Discipline:**
@@ -93,7 +101,12 @@ Task tool (general-purpose):
     **Testing:**
     - Do tests actually verify behavior (not just mock behavior)?
     - Did I follow TDD if required?
-    - Are tests comprehensive?
+    - Are edge cases and error paths tested?
+
+    **Security:**
+    - Did I avoid hardcoded secrets or credentials?
+    - Are all inputs validated/sanitized?
+    - No sensitive data in logs or error messages?
 
     If you find issues during self-review, fix them now before reporting.
 
@@ -107,7 +120,7 @@ Task tool (general-purpose):
     - Self-review findings (if any)
     - Any issues or concerns
 
-    Use DONE_WITH_CONCERNS if you completed the work but have doubts about correctness.
-    Use BLOCKED if you cannot complete the task. Use NEEDS_CONTEXT if you need
-    information that wasn't provided. Never silently produce work you're unsure about.
+    Use DONE_WITH_CONCERNS if you completed the work but have doubts.
+    Use BLOCKED if you cannot complete the task.
+    Never silently produce work you're unsure about.
 ```
