@@ -73,10 +73,7 @@ function Install-ToDir {
         Write-Green "[DRY-RUN] Agents: $src -> $dst"
     } elseif (Test-Path $src) {
         New-Item -ItemType Directory -Path $dst -Force | Out-Null
-        Copy-Item "$src\code-reviewer.md" "$dst\" -Force -ErrorAction SilentlyContinue
-        Copy-Item "$src\implementer.md" "$dst\" -Force -ErrorAction SilentlyContinue
-        Copy-Item "$src\spec-reviewer.md" "$dst\" -Force -ErrorAction SilentlyContinue
-        Copy-Item "$src\code-quality-reviewer.md" "$dst\" -Force -ErrorAction SilentlyContinue
+        Get-ChildItem -Filter "*.md" $src | ForEach-Object { Copy-Item $_.FullName "$dst\" -Force -ErrorAction SilentlyContinue }
         Remove-Item "$dst\spec-reviewer-prompt.md" -Force -ErrorAction SilentlyContinue
         Remove-Item "$dst\code-quality-reviewer-prompt.md" -Force -ErrorAction SilentlyContinue
         Remove-Item "$dst\implementer-prompt.md" -Force -ErrorAction SilentlyContinue

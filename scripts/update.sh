@@ -67,13 +67,12 @@ update_dir() {
         sync_skills "$repo_dir/skills" "$TRAE_DIR/skills"
     fi
 
-    # Agents
+    # Agents (复制所有 agent prompt 模板，清理旧格式)
     if [ -d "$repo_dir/agents" ]; then
         mkdir -p "$TRAE_DIR/agents"
-        cp "$repo_dir/agents/code-reviewer.md" "$TRAE_DIR/agents/" 2>/dev/null || true
-        cp "$repo_dir/agents/implementer.md" "$TRAE_DIR/agents/" 2>/dev/null || true
-        cp "$repo_dir/agents/spec-reviewer.md" "$TRAE_DIR/agents/" 2>/dev/null || true
-        cp "$repo_dir/agents/code-quality-reviewer.md" "$TRAE_DIR/agents/" 2>/dev/null || true
+        for f in "$repo_dir/agents"/*.md; do
+            [ -f "$f" ] && cp "$f" "$TRAE_DIR/agents/" 2>/dev/null || true
+        done
         rm -f "$TRAE_DIR/agents/spec-reviewer-prompt.md" "$TRAE_DIR/agents/code-quality-reviewer-prompt.md" "$TRAE_DIR/agents/implementer-prompt.md" 2>/dev/null || true
         local count
         count=$(ls "$TRAE_DIR/agents"/*.md 2>/dev/null | wc -l)

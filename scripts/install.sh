@@ -131,18 +131,16 @@ install_to_dir() {
         sync_skills "$src" "$dst" "$DRY_RUN"
     fi
 
-    # Agents
+    # Agents (复制所有 agent prompt 模板，清理旧格式)
     src="$repo_dir/agents"
     dst="$TRAE_DIR/agents"
     if [ "$DRY_RUN" = true ]; then
         log_info "[DRY-RUN] 将安装 Agents: $src -> $dst"
     elif [ -d "$src" ]; then
         mkdir -p "$dst"
-        # 只复制标准命名的文件，清理旧格式
-        cp "$src/code-reviewer.md" "$dst/" 2>/dev/null || true
-        cp "$src/implementer.md" "$dst/" 2>/dev/null || true
-        cp "$src/spec-reviewer.md" "$dst/" 2>/dev/null || true
-        cp "$src/code-quality-reviewer.md" "$dst/" 2>/dev/null || true
+        for f in "$src"/*.md; do
+            [ -f "$f" ] && cp "$f" "$dst/" 2>/dev/null || true
+        done
         # 清理旧格式重复文件
         rm -f "$dst/spec-reviewer-prompt.md" "$dst/code-quality-reviewer-prompt.md" "$dst/implementer-prompt.md" 2>/dev/null || true
         local count
